@@ -1,0 +1,19 @@
+﻿{
+	"entities": [],
+	"resources": {		
+		"shaders": {
+			"defaultVertexShader": "vertex.glsl",
+			"defaultFragmentShader": "fragment.glsl"
+		},
+		"programs": {
+			"defaultProgram": "program.json"
+		},
+		"buffers": {
+			"staticBuffer": "staticBuffer.json",
+			"dynamicBuffer": "dynamicBuffer.json"
+		},
+		"textures": {
+			"defaultTexture": "texture.json"
+		}
+	}
+}

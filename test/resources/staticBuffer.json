@@ -1,0 +1,22 @@
+{
+    "data": [
+        -1, 1, 0.0, 1.0,
+        -1, -1, 0.0, 0.0,
+        1, 1, 1.0, 1.0,
+        1, -1, 1.0, 0.0
+    ],
+    "attributes": [
+        {
+            "name": "vertexPosition",
+            "stride": 16,
+            "offset": 0,
+            "components": 2
+        },
+        {
+            "name": "vertexCoordinate",
+            "stride": 16,
+            "offset": 8,
+            "components": 2
+        }
+    ]
+}

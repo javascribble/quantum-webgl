@@ -1,0 +1,26 @@
+{
+    "usage": "DYNAMIC_DRAW",
+    "attributes": [
+        {
+            "name": "spriteTranslation",
+            "stride": 24,
+            "offset": 0,
+            "divisor": 1,
+            "components": 3
+        },
+        {
+            "name": "spriteRotation",
+            "stride": 24,
+            "offset": 12,
+            "divisor": 1,
+            "components": 1
+        },
+		{
+            "name": "spriteScale",
+            "stride": 24,
+            "offset": 16,
+            "divisor": 1,
+            "components": 2
+        }
+    ]
+}

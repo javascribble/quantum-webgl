@@ -1,0 +1,12 @@
+{
+    "usage": "DYNAMIC_DRAW",
+    "attributes": [
+        {
+            "name": "modelTransform",
+            "stride": 36,
+            "offset": 0,
+            "divisor": 1,
+            "components": 9
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "vertexShader": "vertex.glsl",
+    "fragmentShader": "fragment.glsl",
+    "uniforms": [
+        {
+            "name": "projectionView"
+        },
+        {
+            "name": "sampler0",
+            "value": 0
+        }
+    ]
+}
