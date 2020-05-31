@@ -1,10 +1,13 @@
-import { createCanvas, resizeCanvas, getContext } from '../output/canvas.js';
+import { Quantum, define } from '@javascribble/quantum';
+import { resizeCanvas, getContext } from '../output/canvas.js';
 import { loadImage } from '../network/loader.js';
+import { webgl } from '../templates/webgl.js';
 
-export class WebGL extends HTMLElement {
+export class WebGL extends Quantum {
     constructor() {
-        super();
+        super(webgl);
 
+        // TODO: Unfinished.
         this.canvas = createCanvas();
         this.context = getContext(this.canvas);
         this.appendChild(this.canvas);
@@ -28,4 +31,4 @@ export class WebGL extends HTMLElement {
     }
 }
 
-customElements.define('webgl-plugin', WebGL);
+define(WebGL);
