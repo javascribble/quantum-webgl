@@ -1,4 +1,4 @@
-import { Quantum, define } from '@javascribble/quantum';
+import { Quantum, define } from '../../references/quantum.js';
 import { resizeCanvas, getContext } from '../output/canvas.js';
 import { loadImage } from '../network/loader.js';
 import { webgl } from '../templates/webgl.js';
