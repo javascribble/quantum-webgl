@@ -1,11 +1,10 @@
-import { Quantum, define } from '../../references/quantum.js';
+import { Component } from '../../references/quantum.js';
 import { resizeCanvas, getContext } from '../output/canvas.js';
 import { loadImage } from '../network/loader.js';
-import { webgl } from '../templates/webgl.js';
 
-export class WebGL extends Quantum {
+export class WebGL extends Component {
     constructor() {
-        super(webgl);
+        super();
 
         // TODO: Unfinished.
         this.canvas = createCanvas();
@@ -24,6 +23,10 @@ export class WebGL extends Quantum {
         engine.systems.add(this);
     }
 
+    static template = document.querySelector('#quantum-webgl');
+
+    static attributes = [];
+
     animate(deltaTime) {
         resizeCanvas(this.canvas);
         for (const { renderable } of this.entities) {
@@ -31,4 +34,4 @@ export class WebGL extends Quantum {
     }
 }
 
-define(WebGL);
+customElements.define('quantum-webgl', WebGL);
