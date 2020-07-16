@@ -1,6 +1,7 @@
-import { Component } from '../../references/quantum.js';
+import { Component, template } from '../../references/quantum.js';
 import { resizeCanvas, getContext } from '../output/canvas.js';
 import { loadImage } from '../network/loader.js';
+import html from '../templates/webgl.js';
 
 export class WebGL extends Component {
     constructor() {
@@ -23,7 +24,7 @@ export class WebGL extends Component {
         engine.systems.add(this);
     }
 
-    static template = document.querySelector('#quantum-webgl');
+    static template = template(html);
 
     static attributes = [];
 
