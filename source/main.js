@@ -1,3 +1,3 @@
-import * as webgl from './elements/webgl.js';
+import { WebGL } from './elements/webgl.js';
 
-Object.assign(quantum, webgl);
+Quantum.WebGL = WebGL;
