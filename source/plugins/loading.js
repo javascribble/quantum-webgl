@@ -1,21 +1,6 @@
-export const loadImage = async (resource) => {
-    return new Promise((resolve, reject) => {
-        const image = new Image();
-        image.onload = () => resolve(image);
-        image.src = resource;
-    });
-};
+const { loaders, loadText } = quantum;
 
-export const loadScene = async (resource) => {
-    const scene = await loadResource(resource);
-
-    const resources = scene.resources;
-    resources.programs = await loadResources(resources.programs, loadProgram);
-    resources.buffers = await loadResources(resources.buffers, loadBuffer);
-    resources.textures = await loadResources(resources.textures, loadTexture);
-
-    return scene;
-};
+loaders.glsl = loadText;
 
 const loadProgram = async (resource) => {
     const programResource = await loadResource(resource);

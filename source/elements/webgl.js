@@ -1,36 +1,31 @@
-import { resizeCanvas, getContext } from '../output/canvas.js';
-import { loadImage } from '../network/loader.js';
+import { defaultCanvasOptions } from '../constants/options.js';
+import { resize, resizeObserver } from '../utilities/element.js';
+import { getWebGLContext } from '../graphics/renderer.js';
 import html from '../templates/webgl.js';
 
 export class WebGL extends Quantum {
+    #canvas = this.shadowRoot.querySelector('canvas');
+    #context = getWebGLContext(this.#canvas, defaultCanvasOptions);
+
     constructor() {
         super();
 
-        // TODO: Unfinished.
-        this.canvas = createCanvas();
-        this.context = getContext(this.canvas);
-        this.appendChild(this.canvas);
-
-        this.entities = new Set();
-        this.add = (entity) => this.entities.add(entity);
-        this.delete = (entity) => this.entities.delete(entity);
-        this.validate = (entity) => entity.renderable;
-
-        const engine = this.parentElement;
-        engine.loaders.png = loadImage;
-        engine.loaders.glsl = engine.loadText;
-        engine.animations.add(this);
-        engine.systems.add(this);
+        this.addEventListener('resize', event => resize(this.#canvas, this.scale || devicePixelRatio));
     }
 
-    static template = template(html);
+    static get observedAttributes() { return ['scale']; }
 
-    static attributes = [];
+    connectedCallback() {
+        resizeObserver.observe(this);
+    }
 
-    animate(deltaTime) {
-        resizeCanvas(this.canvas);
-        for (const { renderable } of this.entities) {
-        }
+    disconnectedCallback() {
+        resizeObserver.unobserve(this);
+    }
+
+    drawImage(image) {
+        const { source, sx, sy, sw, sh, dx, dy, dw, dh } = image;
+        //this.#context.drawImage(source, sx, sy, sw, sh, dx, dy, dw, dh);
     }
 }
 
