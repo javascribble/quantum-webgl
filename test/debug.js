@@ -6,7 +6,7 @@ const webgl = document.querySelector('quantum-webgl');
 const source = document.querySelector('img');
 
 webgl.addEventListener('resize', event => {
-    console.log(event);
+    webgl.setResolution();
     webgl.drawImage({
         source,
         sx: 0,

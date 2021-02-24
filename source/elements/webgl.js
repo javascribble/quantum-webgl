@@ -1,19 +1,13 @@
 import { defaultCanvasOptions } from '../constants/options.js';
-import { resize, resizeObserver } from '../utilities/element.js';
-import { getWebGLContext } from '../graphics/renderer.js';
+import { getWebGLContext } from '../graphics/context.js';
 import html from '../templates/webgl.js';
+
+const { resizeObserver } = quantum;
 
 export class WebGL extends Quantum {
     #canvas = this.shadowRoot.querySelector('canvas');
-    #context = getWebGLContext(this.#canvas, defaultCanvasOptions);
 
-    constructor() {
-        super();
-
-        this.addEventListener('resize', event => resize(this.#canvas, this.scale || devicePixelRatio));
-    }
-
-    static get observedAttributes() { return ['scale']; }
+    context = getWebGLContext(this.#canvas, defaultCanvasOptions);
 
     connectedCallback() {
         resizeObserver.observe(this);
@@ -23,10 +17,17 @@ export class WebGL extends Quantum {
         resizeObserver.unobserve(this);
     }
 
-    drawImage(image) {
-        const { source, sx, sy, sw, sh, dx, dy, dw, dh } = image;
-        //this.#context.drawImage(source, sx, sy, sw, sh, dx, dy, dw, dh);
-    }
+    setResolution(width = this.#canvas.clientWidth * devicePixelRatio, height = this.#canvas.clientHeight * devicePixelRatio) {
+        if (this.#canvas.width !== width) {
+            this.#canvas.width = width;
+        }
+
+        if (this.#canvas.height !== height) {
+            this.#canvas.height = height;
+        }
+
+        this.context.viewport(0, 0, this.context.drawingBufferWidth, this.context.drawingBufferHeight);
+    };
 }
 
 WebGL.define('quantum-webgl', html);

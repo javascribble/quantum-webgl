@@ -1,12 +1,10 @@
-import { resizeContext } from './context.js';
 import { useProgram } from '../handles/programs.js';
 import { bindBuffer, bufferData } from '../handles/buffers.js';
 import { bindTexture, bufferTexture } from '../handles/textures.js';
 
-export const createWebGLRenderer = (context, renderable, options) => {
+export const createWebGLRenderer = (context, renderable) => {
     const state = {};
     return (deltaTime) => {
-        resizeContext(context, options.scale);
         context.clear(context.DEPTH_BUFFER_BIT);
         for (const pass of renderable.passes) {
             const program = pass.program;

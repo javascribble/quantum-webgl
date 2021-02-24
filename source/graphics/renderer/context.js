@@ -1,8 +1,8 @@
-import { getContext, resizeCanvas, firstSubstring } from './canvas.js';
+import { getContext } from './canvas.js';
 
 export const extensionNames = ['ANGLE_instanced_arrays'];
 
-export const createWebGLContext = (canvas, options) => {
+export const getWebGLContext = (canvas, options) => {
     const context = getContext(canvas, options);
     applyOptionsAndExtensions(context);
     return context;
@@ -23,11 +23,5 @@ export const applyOptionsAndExtensions = (context) => {
             const memberNameWithoutVendorName = firstSubstring(member, member.indexOf(vendorName) - (isConstant ? 1 : 0));
             context[memberNameWithoutVendorName] = isConstant ? extension[member] : extension[member].bind(extension);
         }
-    }
-};
-
-export const resizeContext = (context, scale) => {
-    if (resizeCanvas(context.canvas, scale)) {
-        context.viewport(0, 0, context.drawingBufferWidth, context.drawingBufferHeight);
     }
 };
