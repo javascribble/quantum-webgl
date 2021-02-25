@@ -1,1 +1,0 @@
-export const getContext = (canvas, options) => canvas.getContext('webgl2', options) || canvas.getContext('webgl', options);
