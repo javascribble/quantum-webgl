@@ -12,7 +12,7 @@ export class WebGL extends Quantum.Canvas {
         super.setResolution(width, height);
 
         this.context.viewport(0, 0, this.context.drawingBufferWidth, this.context.drawingBufferHeight);
-    };
+    }
 }
 
 WebGL.define('quantum-webgl', html);
