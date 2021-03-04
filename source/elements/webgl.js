@@ -1,5 +1,4 @@
 import { applyOptionsAndExtensions } from '../graphics/renderer/context.js';
-import html from '../templates/webgl.js';
 
 export class WebGL extends Quantum.Canvas {
     getContext() {
@@ -14,5 +13,3 @@ export class WebGL extends Quantum.Canvas {
         this.context.viewport(0, 0, this.context.drawingBufferWidth, this.context.drawingBufferHeight);
     }
 }
-
-WebGL.define('quantum-webgl', html);
