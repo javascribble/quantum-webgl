@@ -1,0 +1,1 @@
+export const extensionNames = ['ANGLE_instanced_arrays'];
