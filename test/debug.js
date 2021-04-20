@@ -1,45 +1,44 @@
 import '/node_modules/@javascribble/quantum/source/main.js';
 import '/node_modules/@javascribble/quantum-canvas/source/main.js';
-import '/source/decorators/loaders.js';
-import '/source/extensions/images.js';
+import '/source/extensions/node.js';
+import '/source/extensions/sprite.js';
 import '/source/main.js';
 
+const display = document.querySelector('#display');
 const webgl = document.querySelector('quantum-webgl');
 const image = document.querySelector('img');
 
-const sprite = {
-    image,
-    sx: 0,
-    sy: 0,
-    sw: image.width,
-    sh: image.height,
-    dx: -image.width / 2,
-    dy: -image.width / 2,
-    dw: image.width,
-    dh: image.height
-};
+const { Node, Sprite } = webgl;
 
-const clone1 = {
-    ...sprite,
-    position: { x: 200, y: 200 },
-    rotation: 0,
-    scale: { x: 1, y: 1 }
-};
+let count = 0;
+const root = new Node();
+const sprite = new Sprite(image);
+const animation = quantum.animate(({ delta, elapsed }) => {
+    const fps = Math.trunc(1000 / delta);
 
-const clone2 = {
-    ...sprite,
-    position: { x: 100, y: 100 },
-    rotation: 0,
-    scale: { x: 1, y: 1 }
-};
+    for (let i = 0; i < 10; i++) {
+        const node = new Node();
+        node.drawables.push(sprite);
+        root.children.push(node);
+        count++;
+    }
 
-clone1.children = [clone2];
+    for (const { transform } of root.children) {
+        const { translation, rotation, scale } = transform;
+        rotation.z = Math.random() * Math.PI;
+        translation.x = (translation.x + Math.random() * 10) % webgl.clientWidth;
+        translation.y = (translation.y + Math.random() * 10) % webgl.clientHeight;
+    }
 
-quantum.animate(time => {
-    const radians = time.delta * 0.05 % 360 * Math.PI / 180;
-    clone1.rotation += radians;
-    clone2.rotation += radians;
-    webgl.drawImageTree(clone1);
-}).start();
+    root.draw(webgl.context);
+
+    display.innerHTML = `FPS: ${fps} Count: ${count}`;
+
+    if (fps < 30) {
+        animation.stop();
+    }
+});
+
+animation.start();
 
 document.body.style.visibility = 'visible';

@@ -51,3 +51,9 @@ export const deleteTexture = (texture, context) => {
     context.textures.delete(texture);
     context.deleteTexture(texture.handle);
 };
+
+// const loadTexture = async (resource) => {
+//     const textureResource = await loadResource(resource);
+//     textureResource.data = await loadResource(textureResource.data);
+//     return textureResource;
+// };
