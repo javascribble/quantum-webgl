@@ -132,17 +132,4 @@ const copy = (transform, array, index) => {
     const sin = Math.sin(rotation.z);
     const cos = Math.cos(rotation.z);
     array.set([cos * scale.x, sin * scale.x, 0, -sin * scale.y, cos * scale.y, 0, translation.x, translation.y, 1], index);
-
-    // const translation = m4.create();
-    // const rotation = m4.create();
-    // const scale = m4.create();
-    // m4.setTranslation(translation, transform.translation);
-    // m4.setRotation(rotation, transform.rotation);
-    // m4.setScale(scale, transform.scale);
-
-    // const transformation = m4.create();
-    // m4.multiply(translation, rotation, transformation);
-    // m4.multiply(transformation, scale, transformation);
-
-    // array.set(transformation, index);
 };
