@@ -35,9 +35,3 @@ export const deleteBuffer = (buffer, context) => {
     context.buffers.delete(buffer);
     context.deleteBuffer(buffer.handle);
 };
-
-// const loadBuffer = async (resource) => {
-//     const bufferResource = await loadResource(resource);
-//     bufferResource.data = new Float32Array(bufferResource.data);
-//     return bufferResource;
-// };

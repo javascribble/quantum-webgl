@@ -1,50 +1,5 @@
-// export const createTransform = () => ({
-//     translation: { x: 0, y: 0, z: 0 },
-//     rotation: { x: 0, y: 0, z: 0 },
-//     scale: { x: 0, y: 0, z: 0 },
-// });
-
-// const copyTransform = (transform, array) => {
-//     // TODO: Only multiply the parts that have changed.
-//     const translation = transform.translation;
-//     const rotation = transform.rotation;
-//     const scale = transform.scale;
-//     array.set([translation.x, translation.y, rotation.z, scale.x, scale.y, translation.z]);
-
-//     // const translation = matrix4.create();
-//     // const rotation = matrix4.create();
-//     // const scale = matrix4.create();
-//     // matrix4.setTranslation(translation, transform.translation);
-//     // matrix4.setRotation(rotation, transform.rotation);
-//     // matrix4.setScale(scale, transform.scale);
-
-//     // const transformation = matrix4.create();
-//     // matrix4.multiply(translation, rotation, transformation);
-//     // matrix4.multiply(transformation, scale, transformation);
-
-//     // array.set(transformation);
-// };
-
-// export default (engine) => {
-//     const transforms = new Set();
-//     engine.systems.set('transform', transforms);
-//     engine.updates.add({
-//         update: (deltaTime) => {
-//             for (const transform of transforms) {
-//                 if (transform.changed) {
-//                     copyTransform(transform, renderable.data);
-//                     //bufferData(renderable.buffer, renderable.index, renderable.data);
-//                     transform.changed = false;
-//                 }
-//             }
-//         }
-//     });
-// };
-
 import { allocateHandles, deallocateHandles } from '../renderer/handles.js';
 import { createSprite, spriteComponent } from '../components/sprite.js';
-import { createManagedWebGLContext } from '../renderer/manager.js';
-import { createWebGLRenderer } from '../renderer/renderer.js';
 
 export const registerVideoSystem = async (options = defaultVideoOptions) => {
     const context = createManagedWebGLContext(options);
@@ -124,6 +79,76 @@ const createWebGLRenderable = (context) => {
     };
 };
 
+import { useProgram } from '../handles/programs.js';
+import { bindBuffer, bufferData } from '../handles/buffers.js';
+import { bindTexture, bufferTexture } from '../handles/textures.js';
+
+export const createWebGLRenderer = (context, renderable) => {
+    const state = {};
+    return (deltaTime) => {
+        context.clear(context.DEPTH_BUFFER_BIT);
+        for (const pass of renderable.passes) {
+            const program = pass.program;
+            if (state.program !== program) {
+                useProgram(program, context);
+                state.program = program;
+                state.bind = true;
+            }
+
+            for (const uniform of program.uniforms) {
+                if (state.bind || uniform.changed) {
+                    program[uniform.name](uniform.value);
+                    uniform.changed = false;
+                }
+            }
+
+            for (const buffer of pass.buffers) {
+                if (state.bind) {
+                    bindBuffer(buffer, context);
+                    for (const attribute of buffer.attributes) {
+                        program[attribute.name](attribute);
+                    }
+                }
+
+                if (buffer.changed) {
+                    bufferData(buffer, context);
+                    buffer.changed = false;
+                }
+            }
+
+            if (state.bind) {
+                for (const texture of pass.textures) {
+                    texture.unit = 0;// TODO: Put this in the right place.
+                    bindTexture(texture, context);
+                    if (texture.changed) {
+                        bufferTexture(texture, context);
+                        texture.changed = false;
+                    }
+                }
+            }
+
+            state.bind = false;
+            pass.draw();
+        }
+    }
+};
+
+// export default (engine) => {
+//     const transforms = new Set();
+//     engine.systems.set('transform', transforms);
+//     engine.updates.add({
+//         update: (deltaTime) => {
+//             for (const transform of transforms) {
+//                 if (transform.changed) {
+//                     copyTransform(transform, renderable.data);
+//                     //bufferData(renderable.buffer, renderable.index, renderable.data);
+//                     transform.changed = false;
+//                 }
+//             }
+//         }
+//     });
+// };
+
 const copy = (transform, array, index) => {
     // TODO: Only multiply the parts that have changed.
     const translation = transform.translation;
@@ -132,4 +157,18 @@ const copy = (transform, array, index) => {
     const sin = Math.sin(rotation.z);
     const cos = Math.cos(rotation.z);
     array.set([cos * scale.x, sin * scale.x, 0, -sin * scale.y, cos * scale.y, 0, translation.x, translation.y, 1], index);
+    // array.set([translation.x, translation.y, rotation.z, scale.x, scale.y, translation.z]);
+
+    // const translation = matrix4.create();
+    // const rotation = matrix4.create();
+    // const scale = matrix4.create();
+    // matrix4.setTranslation(translation, transform.translation);
+    // matrix4.setRotation(rotation, transform.rotation);
+    // matrix4.setScale(scale, transform.scale);
+
+    // const transformation = matrix4.create();
+    // matrix4.multiply(translation, rotation, transformation);
+    // matrix4.multiply(transformation, scale, transformation);
+
+    // array.set(transformation);
 };

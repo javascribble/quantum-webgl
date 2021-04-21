@@ -7,7 +7,3 @@ export const canvasOptions = {
     premultipliedAlpha: true,
     preserveDrawingBuffer: false
 };
-
-export const extensionOptions = [
-    'ANGLE_instanced_arrays'
-];

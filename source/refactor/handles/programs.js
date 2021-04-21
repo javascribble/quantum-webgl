@@ -33,17 +33,3 @@ export const deleteProgram = (program, context) => {
     context.programs.delete(program);
     context.deleteProgram(program.handle);
 };
-
-// const loadProgram = async (resource) => {
-//     const programResource = await loadResource(resource);
-
-//     programResource.vertexShader = {
-//         source: await loadResource(programResource.vertexShader)
-//     };
-
-//     programResource.fragmentShader = {
-//         source: await loadResource(programResource.fragmentShader)
-//     };
-
-//     return programResource;
-// };
