@@ -1,11 +1,10 @@
-﻿export const createShader = (context, source, type) => {
+﻿export const createShader = (configuration, context) => {
     const shader = {
-        source,
-        type
+        type: context[configuration.type] || configuration.type,
+        source: configuration.source
     };
 
     restoreShader(shader, context);
-    context.shaders.add(shader);
     return shader;
 };
 
@@ -18,7 +17,4 @@ export const restoreShader = (shader, context) => {
     }
 };
 
-export const deleteShader = (shader, context) => {
-    context.shaders.delete(shader);
-    context.deleteShader(shader.handle);
-};
+export const deleteShader = (shader, context) => context.deleteShader(shader.handle);

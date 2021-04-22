@@ -1,18 +1,12 @@
-﻿export const createBuffer = (context, target, usage, data) => {
+﻿export const createBuffer = (configuration, context) => {
     const buffer = {
-        target,
-        usage,
-        data
+        target: context[configuration.target] || configuration.target || context.ARRAY_BUFFER,
+        usage: context[configuration.usage] || configuration.usage || context.STATIC_DRAW,
+        offset: configuration.offset || 0,
+        data: configuration.data
     };
 
-    // TODO: Simplify.
-    buffer.offset = 0;
-    buffer.changed = !!buffer.data;
-    buffer.target = context[buffer.target] || buffer.target || context.ARRAY_BUFFER;
-    buffer.usage = context[buffer.usage] || buffer.usage || context.STATIC_DRAW;
-
     restoreBuffer(buffer, context);
-    context.buffers.add(buffer);
     return buffer;
 };
 
@@ -28,7 +22,4 @@ export const bufferData = (buffer, context) => {
     }
 };
 
-export const deleteBuffer = (buffer, context) => {
-    context.buffers.delete(buffer);
-    context.deleteBuffer(buffer.handle);
-};
+export const deleteBuffer = (buffer, context) => context.deleteBuffer(buffer.handle);

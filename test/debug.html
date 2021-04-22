@@ -8,6 +8,29 @@
             <div id="display"></div>
             <quantum-webgl>
                 <img src="/test/resources/image.png">
+                <script type="x-shader/x-vertex">
+                    uniform mat3 projectionView;
+                    attribute mat3 modelTransform;
+                    attribute vec2 vertexPosition; 
+                    attribute vec2 vertexCoordinate; 
+                    varying vec2 fragmentCoordinate; 
+
+                    void main() { 
+                        gl_Position = vec4((projectionView * modelTransform * vec3(vertexPosition, 1)).xy, 0, 1);
+
+                        fragmentCoordinate = vertexCoordinate;
+                    }
+                </script>
+                <script type="x-shader/x-fragment">
+                    precision mediump float;
+
+                    uniform sampler2D sampler0;
+                    varying vec2 fragmentCoordinate;
+
+                    void main() {
+                        gl_FragColor = texture2D(sampler0, fragmentCoordinate);
+                    }
+                </script>
             </quantum-webgl>
         </div>
     </body>

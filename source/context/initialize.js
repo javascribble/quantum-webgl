@@ -1,11 +1,11 @@
-import { createHandles, restoreHandles } from './handles.js';
+import { applyHandles, restoreHandles } from './handles.js';
 import { applyConfigurations } from './configuration.js';
 import { applyExtensions } from './extension.js';
 
 export const initializeContext = context => {
     applyConfigurations(context);
     applyExtensions(context);
-    createHandles(context);
+    applyHandles(context);
 
     // TODO: Pause rendering while context is lost.
     const contextCreationError = () => { };

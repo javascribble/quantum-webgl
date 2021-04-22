@@ -1,13 +1,13 @@
 ﻿import { addVariables } from '../shaders/variables.js';
 
-export const createProgram = (context, vertexShader, fragmentShader) => {
+export const createProgram = (configuration, context) => {
+    // TODO: Decouple from shader handle cache.
     const program = {
-        vertexShader,
-        fragmentShader
+        vertexShader: context.shaders.get(configuration.vertexShader),
+        fragmentShader: context.shaders.get(configuration.fragmentShader),
     };
 
     restoreProgram(program, context);
-    context.programs.add(program);
     return program;
 };
 
@@ -25,7 +25,4 @@ export const restoreProgram = (program, context) => {
 
 export const useProgram = (program, context) => context.useProgram(program.handle);
 
-export const deleteProgram = (program, context) => {
-    context.programs.delete(program);
-    context.deleteProgram(program.handle);
-};
+export const deleteProgram = (program, context) => context.deleteProgram(program.handle);
