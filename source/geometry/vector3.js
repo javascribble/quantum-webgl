@@ -1,4 +1,4 @@
-import { Vector2 } from './vector2.js';
+import { Vector2 } from './vector2.js.js.js.js';
 
 export class Vector3 extends Vector2 {
     constructor(buffer = [0, 0, 0], offset = 0, length = 3) {

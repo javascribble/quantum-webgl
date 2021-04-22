@@ -4,13 +4,9 @@
         type
     };
 
-    applyShader(shader, context);
-    return shader;
-};
-
-export const applyShader = (shader, context) => {
     restoreShader(shader, context);
     context.shaders.add(shader);
+    return shader;
 };
 
 export const restoreShader = (shader, context) => {

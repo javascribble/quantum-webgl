@@ -1,6 +1,6 @@
 import { createHandles, restoreHandles } from './handles.js';
 import { applyConfigurations } from './configuration.js';
-import { applyExtensions } from './extension';
+import { applyExtensions } from './extension.js';
 
 export const initializeContext = context => {
     applyConfigurations(context);

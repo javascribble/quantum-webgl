@@ -1,39 +1,58 @@
-import { allocateHandles, deallocateHandles } from '../renderer/handles.js';
-import { createSprite, spriteComponent } from '../components/sprite.js';
+import { applyShader, deleteShader } from '../handles/shaders.js';
+import { applyProgram, deleteProgram } from '../handles/programs.js';
+import { applyBuffer, deleteBuffer } from '../handles/buffers.js';
+import { applyTexture, deleteTexture } from '../handles/textures.js';
 
-export const registerVideoSystem = async (options = defaultVideoOptions) => {
-    const context = createManagedWebGLContext(options);
-    const renderable = createWebGLRenderable(context);
-    const render = createWebGLRenderer(context, renderable, options);
+export const allocateHandles = (context, cache, resources) => {
+    applyHandles(context, cache, resources.programs, applyProgramAndShaders);
+    applyHandles(context, cache, resources.buffers, applyBuffer);
+    applyHandles(context, cache, resources.textures, applyTexture);
+};
 
-    const renderables = new Set();
-    const updateRenderables = (deltaTime) => {
-        let index = 0;
-        let firstChangedRenderable = null;
-        for (const renderable of renderables) {
-            const transform = renderable.transform;
-            if (transform.changed) {
-                const buffer = renderable.buffer;
-                copy(transform, buffer.data, renderable.index * matrix3.components);
-                transform.changed = false;
-                buffer.changed = true;
+export const deallocateHandles = (context, cache, resources) => {
+    deleteHandles(context, cache, resources.programs, deleteProgramAndShaders);
+    deleteHandles(context, cache, resources.buffers, deleteBuffer);
+    deleteHandles(context, cache, resources.textures, deleteTexture);
+};
 
-                if (index < renderables.size && !firstChangedRenderable) {
-                    firstChangedRenderable = renderable;
-                    buffer.offset = index;
-                }
+const applyHandles = (context, cache, resources, applicationMethod) => {
+    for (const resourceName in resources) {
+        if (cache.hasOwnProperty(resourceName)) {
+            cache[resourceName].references++;
+        } else {
+            let newResource = {
+                ...resources[resourceName],
+                references: 1
+            };
 
-                index++;
-            }
-        }
-
-        if (firstChangedRenderable) {
-            //renderables.delete(firstChangedRenderable);
-            //renderables.add(firstChangedRenderable);
+            applicationMethod(newResource, context);
+            cache[resourceName] = newResource;
         }
     }
+};
 
-    registerSystem(spriteComponent, renderables, updateRenderables);
+const deleteHandles = (context, cache, resources, deletionMethod) => {
+    for (const resourceName in resources) {
+        const activeResource = cache[resourceName];
+        if (activeResource.references-- === 0) {
+            deletionMethod(activeResource, context);
+            delete cache[resourceName];
+        }
+    }
+};
+
+const applyProgramAndShaders = (program, context) => {
+    program.vertexShader.type = context.VERTEX_SHADER;
+    program.fragmentShader.type = context.FRAGMENT_SHADER;
+    applyShader(program.vertexShader, context);
+    applyShader(program.fragmentShader, context);
+    applyProgram(program, context);
+};
+
+const deleteProgramAndShaders = (program, context) => {
+    deleteShader(program.vertexShader, context);
+    deleteShader(program.fragmentShader, context);
+    deleteProgram(program, context);
 };
 
 const createWebGLRenderable = (context) => {
@@ -78,10 +97,6 @@ const createWebGLRenderable = (context) => {
         }
     };
 };
-
-import { useProgram } from '../handles/programs.js';
-import { bindBuffer, bufferData } from '../handles/buffers.js';
-import { bindTexture, bufferTexture } from '../handles/textures.js';
 
 export const createWebGLRenderer = (context, renderable) => {
     const state = {};
@@ -133,21 +148,32 @@ export const createWebGLRenderer = (context, renderable) => {
     }
 };
 
-// export default (engine) => {
-//     const transforms = new Set();
-//     engine.systems.set('transform', transforms);
-//     engine.updates.add({
-//         update: (deltaTime) => {
-//             for (const transform of transforms) {
-//                 if (transform.changed) {
-//                     copyTransform(transform, renderable.data);
-//                     //bufferData(renderable.buffer, renderable.index, renderable.data);
-//                     transform.changed = false;
-//                 }
-//             }
-//         }
-//     });
-// };
+const renderables = new Set();
+const updateRenderables = (deltaTime) => {
+    let index = 0;
+    let firstChangedRenderable = null;
+    for (const renderable of renderables) {
+        const transform = renderable.transform;
+        if (transform.changed) {
+            const buffer = renderable.buffer;
+            copy(transform, buffer.data, renderable.index * matrix3.components);
+            transform.changed = false;
+            buffer.changed = true;
+
+            if (index < renderables.size && !firstChangedRenderable) {
+                firstChangedRenderable = renderable;
+                buffer.offset = index;
+            }
+
+            index++;
+        }
+    }
+
+    if (firstChangedRenderable) {
+        renderables.delete(firstChangedRenderable);
+        renderables.add(firstChangedRenderable);
+    }
+}
 
 const copy = (transform, array, index) => {
     // TODO: Only multiply the parts that have changed.

@@ -1,15 +1,11 @@
 ﻿export const createBuffer = (context, target, usage, data) => {
-    let buffer = {
+    const buffer = {
         target,
         usage,
         data
     };
 
-    applyBuffer(buffer, context);
-    return buffer;
-};
-
-export const applyBuffer = (buffer, context) => {
+    // TODO: Simplify.
     buffer.offset = 0;
     buffer.changed = !!buffer.data;
     buffer.target = context[buffer.target] || buffer.target || context.ARRAY_BUFFER;
@@ -17,6 +13,7 @@ export const applyBuffer = (buffer, context) => {
 
     restoreBuffer(buffer, context);
     context.buffers.add(buffer);
+    return buffer;
 };
 
 export const restoreBuffer = (buffer, context) => buffer.handle = context.createBuffer();

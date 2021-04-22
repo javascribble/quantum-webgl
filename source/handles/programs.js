@@ -6,13 +6,9 @@ export const createProgram = (context, vertexShader, fragmentShader) => {
         fragmentShader
     };
 
-    applyProgram(program, context);
-    return program;
-};
-
-export const applyProgram = (program, context) => {
     restoreProgram(program, context);
     context.programs.add(program);
+    return program;
 };
 
 export const restoreProgram = (program, context) => {

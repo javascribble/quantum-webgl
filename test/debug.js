@@ -8,6 +8,85 @@ const display = document.querySelector('#display');
 const webgl = document.querySelector('quantum-webgl');
 const image = document.querySelector('img');
 
+const vertexShader = `                    
+    uniform mat3 projectionView;
+    attribute mat3 modelTransform;
+    attribute vec2 vertexPosition;
+    attribute vec2 vertexCoordinate;
+    varying vec2 fragmentCoordinate;
+
+    void main() {
+        gl_Position = vec4((projectionView * modelTransform * vec3(vertexPosition, 1)).xy, 0, 1);
+
+        fragmentCoordinate = vertexCoordinate;
+    }
+`;
+
+const fragmentShader = `
+    precision mediump float;
+
+    uniform sampler2D sampler0;
+    varying vec2 fragmentCoordinate;
+
+    void main() {
+        gl_FragColor = texture2D(sampler0, fragmentCoordinate);
+    }
+`;
+
+const program = {
+    "vertexShader": "vertex.glsl",
+    "fragmentShader": "fragment.glsl",
+    "uniforms": [
+        {
+            "name": "projectionView"
+        },
+        {
+            "name": "sampler0",
+            "value": 0
+        }
+    ]
+};
+
+const staticBuffer = {
+    "data": [
+        -1, 1, 0.0, 1.0,
+        -1, -1, 0.0, 0.0,
+        1, 1, 1.0, 1.0,
+        1, -1, 1.0, 0.0
+    ],
+    "attributes": [
+        {
+            "name": "vertexPosition",
+            "stride": 16,
+            "offset": 0,
+            "components": 2
+        },
+        {
+            "name": "vertexCoordinate",
+            "stride": 16,
+            "offset": 8,
+            "components": 2
+        }
+    ]
+};
+
+const dynamicBuffer = {
+    "usage": "DYNAMIC_DRAW",
+    "attributes": [
+        {
+            "name": "modelTransform",
+            "stride": 36,
+            "offset": 0,
+            "divisor": 1,
+            "components": 9
+        }
+    ]
+};
+
+const texture = {
+    "data": "image.png"
+};
+
 const { Node, Sprite } = webgl;
 
 let count = 0;

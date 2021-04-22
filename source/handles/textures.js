@@ -7,11 +7,7 @@
         data
     };
 
-    applyTexture(texture, context);
-    return texture;
-};
-
-export const applyTexture = (texture, context) => {
+    // TODO: Simplify.
     texture.changed = !!texture.data;
     texture.type = context[texture.type] || texture.type || context.UNSIGNED_BYTE;
     texture.target = context[texture.target] || texture.target || context.TEXTURE_2D;
@@ -29,6 +25,7 @@ export const applyTexture = (texture, context) => {
 
     restoreTexture(texture, context);
     context.textures.add(texture);
+    return texture;
 };
 
 export const restoreTexture = (texture, context) => texture.handle = context.createTexture();
