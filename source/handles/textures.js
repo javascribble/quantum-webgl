@@ -5,8 +5,9 @@
         target: context[configuration.target] || configuration.target || context.TEXTURE_2D,
         type: context[configuration.type] || configuration.type || context.UNSIGNED_BYTE,
         format: context[configuration.format] || configuration.format || context.RGBA,
+        unit: configuration.unit || 0,
         changed: !!configuration.data,
-        data: configuration.data
+        data: configuration.data,
     };
 
     restoreTexture(texture, context);
