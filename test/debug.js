@@ -29,6 +29,7 @@ webgl.context.allocate({
             uniforms: [
                 {
                     name: 'projectionView'
+                    //matrix3.orthographic()
                 },
                 {
                     name: 'sampler0',
@@ -87,7 +88,7 @@ const { Node, Sprite } = webgl;
 
 let count = 0;
 const root = new Node();
-const sprite = new Sprite(image);
+const sprite = new Sprite(webgl.context);
 const animation = quantum.animate(({ delta }) => {
     const fps = Math.trunc(1000 / delta);
 
@@ -105,6 +106,7 @@ const animation = quantum.animate(({ delta }) => {
         translation.y = (translation.y + Math.random() * 10) % webgl.clientHeight;
     }
 
+    webgl.context.clear(webgl.context.DEPTH_BUFFER_BIT);
     root.draw(webgl.context);
 
     display.innerHTML = `FPS: ${fps} Count: ${count}`;

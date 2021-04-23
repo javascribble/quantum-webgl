@@ -2,46 +2,33 @@ import { createShader, restoreShader, deleteShader } from '../handles/shaders.js
 import { createProgram, restoreProgram, deleteProgram } from '../handles/programs.js';
 import { createBuffer, restoreBuffer, deleteBuffer } from '../handles/buffers.js';
 import { createTexture, restoreTexture, deleteTexture } from '../handles/textures.js';
+import { ReferenceMap } from '../collections/maps.js';
 
 const types = {
-    shaders: { create: createShader, restore: restoreShader, delete: deleteShader },
-    programs: { create: createProgram, restore: restoreProgram, delete: deleteProgram },
-    buffers: { create: createBuffer, restore: restoreBuffer, delete: deleteBuffer },
-    textures: { create: createTexture, restore: restoreTexture, delete: deleteTexture },
+    shaders: { createHandle: createShader, restoreHandle: restoreShader, deleteHandle: deleteShader },
+    programs: { createHandle: createProgram, restoreHandle: restoreProgram, deleteHandle: deleteProgram },
+    buffers: { createHandle: createBuffer, restoreHandle: restoreBuffer, deleteHandle: deleteBuffer },
+    textures: { createHandle: createTexture, restoreHandle: restoreTexture, deleteHandle: deleteTexture },
 };
+
+class HandleMap extends ReferenceMap {
+    createHandles(context, configurations) {
+        for (const configuration of configurations) this.set(configuration.name, () => this.createHandle(configuration, context));
+    }
+
+    restoreHandles(context) {
+        for (const [name, handle] of this) this.restoreHandle(handle, context);
+    }
+
+    deleteHandles(context, configurations) {
+        for (const configuration of configurations) this.delete(configuration.name, handle => this.deleteHandle(handle, context));
+    }
+}
 
 export const applyHandles = context => {
-    for (const type in types) context[type] = new Map();
-
-    context.allocate = data => {
-        for (const type in data) {
-            const cache = context[type];
-            for (const configuration of data[type]) {
-                if (cache.has(configuration.name)) {
-                    cache.get(configuration.name).references++;
-                } else {
-                    const handle = types[type].create(configuration, context);
-                    handle.references = 1;
-                    cache.set(configuration.name, handle);
-                }
-            }
-        }
-    };
-
-    context.deallocate = data => {
-        for (const type in data) {
-            const cache = context[type];
-            for (const configuration of data[type]) {
-                const handle = cache.get(configuration.name);
-                if (handle.references-- === 0) {
-                    types[type].delete(handle, context);
-                    cache.delete(configuration.name);
-                }
-            }
-        }
-    };
+    for (const type in types) context[type] = Object.assign(new HandleMap(), types[type]);
+    context.allocate = data => { for (const type in data) context[type].createHandles(context, data[type]); };
+    context.deallocate = data => { for (const type in data) context[type].deleteHandles(context, data[type]); };
 };
 
-export const restoreHandles = context => {
-    for (const type in types) context[type].values.forEach(value => types[type].restore(value, context));
-};
+export const restoreHandles = context => { for (const type in types) context[type].restoreHandles(context); };
