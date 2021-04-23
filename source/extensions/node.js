@@ -1,4 +1,7 @@
 import { WebGL } from '../elements/webgl.js';
+import { useProgram } from '../handles/programs.js';
+import { bindBuffer, bufferData } from '../handles/buffers.js';
+import { bindTexture, bufferTexture } from '../handles/textures.js';
 
 WebGL.prototype.Node = class Node {
     drawables = [];
@@ -18,11 +21,7 @@ WebGL.prototype.Node = class Node {
         // const cos = Math.cos(rotation.z);
         // context.transform(cos * scale.x, sin * scale.x, -sin * scale.y, cos * scale.y, translation.x, translation.y);
 
-        for (const drawable of this.drawables) {
-            drawable.draw(context);
-        }
-
-        for (const { program, buffers, textures } of this.children) {
+        for (const { program, buffers, textures } of this.drawables) {
             if (context.program !== program) {
                 useProgram(program, context);
                 context.program = program;
@@ -63,7 +62,11 @@ WebGL.prototype.Node = class Node {
                 context.bind = false;
             }
 
-            // context.drawArraysInstanced(context.TRIANGLE_STRIP, 0, 4, count)
+            context.drawArraysInstanced(context.TRIANGLE_STRIP, 0, 4, 1);
+        }
+
+        for (const child of this.children) {
+            child.draw(context);
         }
 
         // context.restore();

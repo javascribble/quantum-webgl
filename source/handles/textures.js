@@ -5,6 +5,7 @@
         target: context[configuration.target] || configuration.target || context.TEXTURE_2D,
         type: context[configuration.type] || configuration.type || context.UNSIGNED_BYTE,
         format: context[configuration.format] || configuration.format || context.RGBA,
+        changed: !!configuration.data,
         data: configuration.data
     };
 

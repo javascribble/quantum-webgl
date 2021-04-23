@@ -3,7 +3,7 @@ export class Matrix4 extends Float32Array {
         super(buffer, offset, length);
     }
 
-    static createOrthographic(size = 100, aspect = 1) {
+    static orthographic(size = 100, aspect = 1) {
         const m4 = Matrix4();
         const scale = 1 / size;
         m4[0] = scale / aspect;
@@ -12,7 +12,7 @@ export class Matrix4 extends Float32Array {
         return m3;
     }
 
-    static createPerspective(radians = Math.PI / 2, aspect = 1, near = 0, far = 100) {
+    static perspective(radians = Math.PI / 2, aspect = 1, near = 0, far = 100) {
         const d = 1 / Math.tan(radians / 2);
         const r = 1 / (near - far);
         const m4 = Matrix4();

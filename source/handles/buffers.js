@@ -2,7 +2,9 @@
     const buffer = {
         target: context[configuration.target] || configuration.target || context.ARRAY_BUFFER,
         usage: context[configuration.usage] || configuration.usage || context.STATIC_DRAW,
+        attributes: configuration.attributes,
         offset: configuration.offset || 0,
+        changed: !!configuration.data,
         data: configuration.data
     };
 

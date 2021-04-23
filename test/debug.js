@@ -4,6 +4,8 @@ import '/source/extensions/node.js';
 import '/source/extensions/sprite.js';
 import '/source/main.js';
 
+import { Matrix3 } from '/source/geometry/matrix3.js';
+
 const display = document.querySelector('#display');
 const webgl = document.querySelector('quantum-webgl');
 const image = document.querySelector('img');
@@ -28,8 +30,8 @@ webgl.context.allocate({
             fragmentShader: 'fragment',
             uniforms: [
                 {
-                    name: 'projectionView'
-                    //matrix3.orthographic()
+                    name: 'projectionView',
+                    value: Matrix3.orthographic()
                 },
                 {
                     name: 'sampler0',
@@ -64,6 +66,7 @@ webgl.context.allocate({
         },
         {
             name: 'model',
+            data: new Float32Array(new Matrix3()),
             usage: 'DYNAMIC_DRAW',
             attributes: [
                 {
@@ -89,6 +92,7 @@ const { Node, Sprite } = webgl;
 let count = 0;
 const root = new Node();
 const sprite = new Sprite(webgl.context);
+root.drawables.push(sprite);
 const animation = quantum.animate(({ delta }) => {
     const fps = Math.trunc(1000 / delta);
 

@@ -5,6 +5,7 @@ export const createProgram = (configuration, context) => {
     const program = {
         vertexShader: context.shaders.get(configuration.vertexShader),
         fragmentShader: context.shaders.get(configuration.fragmentShader),
+        uniforms: configuration.uniforms
     };
 
     restoreProgram(program, context);
