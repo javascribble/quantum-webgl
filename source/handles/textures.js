@@ -1,13 +1,14 @@
-﻿export const createTexture = (configuration, context) => {
-    // TODO: Support text based texture parameter configuration.
+﻿import { textureOptions } from '../constants/context.js';
+
+export const createTexture = (configuration, context) => {
     const texture = {
-        parameters: configuration.parameters || [{ name: context.TEXTURE_MIN_FILTER, value: context.LINEAR }],
+        parameters: Object.map({ ...textureOptions, ...configuration.parameters }, ([name, value]) => [context[name] || name, context[value] || value]),
         target: context[configuration.target] || configuration.target || context.TEXTURE_2D,
         type: context[configuration.type] || configuration.type || context.UNSIGNED_BYTE,
         format: context[configuration.format] || configuration.format || context.RGBA,
         unit: configuration.unit || 0,
         changed: !!configuration.data,
-        data: configuration.data,
+        data: configuration.data
     };
 
     restoreTexture(texture, context);
@@ -22,9 +23,9 @@ export const bindTexture = (texture, context) => {
 }
 
 export const bufferTexture = (texture, context) => {
-    for (const parameter of texture.parameters) {
-        //context.texParameteri(texture.target, parameter.name, parameter.value);
-        context.texParameterf(texture.target, parameter.name, parameter.value);
+    for (const [name, value] of Object.entries(texture.parameters)) {
+        //context.texParameteri(texture.target, name, value);
+        context.texParameterf(texture.target, name, value);
     }
 
     context.texImage2D(texture.target, /* mipmap */ 0, texture.format, texture.format, texture.type, texture.data);

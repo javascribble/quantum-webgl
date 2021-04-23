@@ -31,7 +31,7 @@ webgl.context.allocate({
             uniforms: [
                 {
                     name: 'projectionView',
-                    value: Matrix3.orthographic()
+                    value: Matrix3.orthographic(10)
                 },
                 {
                     name: 'sampler0',
@@ -43,12 +43,12 @@ webgl.context.allocate({
     buffers: [
         {
             name: 'quad',
-            data: new Float32Array([
+            data: [
                 -1, 1, 0.0, 1.0,
                 -1, -1, 0.0, 0.0,
                 1, 1, 1.0, 1.0,
                 1, -1, 1.0, 0.0
-            ]),
+            ],
             attributes: [
                 {
                     name: 'vertexPosition',

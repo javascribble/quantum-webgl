@@ -3,7 +3,7 @@ export class Matrix3 extends Float32Array {
         super(buffer, offset, length);
     }
 
-    static orthographic(size = 100, aspect = 1) {
+    static orthographic(size = 1, aspect = 1) {
         const m3 = new Matrix3();
         const scale = 1 / size;
         m3[0] = scale / aspect;

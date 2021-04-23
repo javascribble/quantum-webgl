@@ -2,11 +2,14 @@
     const buffer = {
         target: context[configuration.target] || configuration.target || context.ARRAY_BUFFER,
         usage: context[configuration.usage] || configuration.usage || context.STATIC_DRAW,
-        attributes: configuration.attributes,
-        offset: configuration.offset || 0,
-        changed: !!configuration.data,
-        data: configuration.data
+        attributes: [...configuration.attributes], // TODO: Deep clone?
+        offset: configuration.offset || 0
     };
+
+    if (configuration.data) {
+        buffer.data = new Float32Array(configuration.data);
+        buffer.changed = true;
+    }
 
     restoreBuffer(buffer, context);
     return buffer;
