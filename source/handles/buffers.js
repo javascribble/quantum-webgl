@@ -1,4 +1,6 @@
-﻿export const createBuffer = (configuration, context) => {
+﻿import { ResizableArray } from '../collections/arrays.js';
+
+export const createBuffer = (configuration, context) => {
     const buffer = {
         target: context[configuration.target] || configuration.target || context.ARRAY_BUFFER,
         usage: context[configuration.usage] || configuration.usage || context.STATIC_DRAW,

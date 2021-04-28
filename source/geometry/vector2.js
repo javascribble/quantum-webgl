@@ -1,12 +1,14 @@
-export class Vector2 extends Float32Array {
-    constructor(buffer = [0, 0], offset = 0, length = 2) {
-        super(buffer, offset, length);
+import { VirtualArray } from '../collections/arrays.js';
+
+export class Vector2 extends VirtualArray {
+    constructor(identity = [0, 0], type = Float32Array) {
+        super(identity, type);
     }
 
-    get x() { return this[0]; }
-    set x(value) { this[0] = value; }
-    get y() { return this[1]; }
-    set y(value) { this[1] = value; }
+    get x() { return this.array[0]; }
+    set x(value) { this.array[0] = value; }
+    get y() { return this.array[1]; }
+    set y(value) { this.array[1] = value; }
 
     static distance = (v2a, v2b) => Math.sqrt(Vector2.distanceSquared(v2a, v2b));
 

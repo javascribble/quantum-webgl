@@ -1,12 +1,12 @@
-import { Vector2 } from './vector2.js.js.js.js';
+import { Vector2 } from './vector2.js';
 
 export class Vector3 extends Vector2 {
-    constructor(buffer = [0, 0, 0], offset = 0, length = 3) {
-        super(buffer, offset, length);
+    constructor(identity = [0, 0, 0], type = Float32Array) {
+        super(identity, type);
     }
 
-    get z() { return this[2]; }
-    set z(value) { this[2] = value; }
+    get z() { return this.array[2]; }
+    set z(value) { this.array[2] = value; }
 
     static distance = (v3a, v3b) => Math.sqrt(Vector3.distanceSquared(v3a, v3b));
 

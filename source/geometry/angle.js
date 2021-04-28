@@ -14,7 +14,7 @@ export class Angle {
         this.#radians = Angle.degreesToRadians(this.#degrees);
     }
 
-    static radiansToDegrees = (radians) => radians * 180 / Math.PI;
+    static radiansToDegrees = radians => radians * 180 / Math.PI;
 
-    static degreesToRadians = (degrees) => degrees * Math.PI / 180;
+    static degreesToRadians = degrees => degrees * Math.PI / 180;
 }
