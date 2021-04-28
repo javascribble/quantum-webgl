@@ -5,16 +5,7 @@ export class Matrix3 extends VirtualArray {
         super(identity, type);
     }
 
-    static orthographic(size = 1, aspect = 1) {
-        const y = 1 / size, x = y / aspect;
-        return [
-            x, 0, 0,
-            0, y, 0,
-            0, 0, 1
-        ];
-    }
-
-    static product(a, b, c) {
+    static multiply(a, b, c) {
         const [a00, a01, a02, a10, a11, a12, a20, a21, a22] = a;
         const [b00, b01, b02, b10, b11, b12, b20, b21, b22] = b;
         c[0] = b00 * a00 + b01 * a10 + b02 * a20;
@@ -29,6 +20,6 @@ export class Matrix3 extends VirtualArray {
     }
 
     multiply(factor, product = new Matrix3()) {
-        Matrix3.product(this.array, factor.array, product.array);
+        Matrix3.multiply(this.array, factor.array, product.array);
     }
 }

@@ -4,7 +4,7 @@ import '/source/extensions/node.js';
 import '/source/extensions/sprite.js';
 import '/source/main.js';
 
-import { Matrix3 } from '/source/geometry/matrix3.js';
+import { Camera } from '/source/geometry/2D/camera.js';
 
 const display = document.querySelector('#display');
 const webgl = document.querySelector('quantum-webgl');
@@ -31,7 +31,7 @@ webgl.context.allocate({
             uniforms: [
                 {
                     name: 'projectionView',
-                    value: new Matrix3(Matrix3.orthographic(10))
+                    value: Camera.orthographic(10)
                 },
                 {
                     name: 'sampler0',

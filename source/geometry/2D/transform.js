@@ -1,11 +1,20 @@
-import { Angle } from "./angle.js";
-import { Vector2 } from "./vector2.js";
+import { Angle } from "../angle.js";
+import { Matrix3 } from "../matrix3.js";
+import { Vector2 } from "../vector2.js";
 
-export class Transform2 {
+export class Transform extends Matrix3 {
     constructor() {
         this.translation = new Vector2();
         this.rotation = new Angle();
         this.scale = new Vector2();
+
+        const translation = new Matrix3();
+        const rotation = new Matrix3();
+        const scale = new Matrix3();
+
+        this.translation.bind(this.#translation.array, 6);
+        this.rotation.bind(this.#translation.array, 6);
+        this.scale.bind(this.#translation.array, 6);
     }
 
     setTranslation(m3, v2) {

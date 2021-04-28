@@ -5,28 +5,7 @@ export class Matrix4 extends VirtualArray {
         super(identity, type);
     }
 
-    static orthographic(size = 1, aspect = 1) {
-        const z = 1 / size, y = 1 / size, x = y / aspect;
-        return [
-            x, 0, 0, 0,
-            0, y, 0, 0,
-            0, 0, z, 0,
-            0, 0, 0, 1
-        ];
-    }
-
-    static perspective(radians = Math.PI / 2, aspect = 1, near = 0, far = 1) {
-        const d = 1 / Math.tan(radians / 2), r = 1 / (near - far);
-        const x = d / aspect, y = d, z = (far + near) * r, t = 2 * far * near * r;
-        return [
-            x, 0, 0, 0,
-            0, y, 0, 0,
-            0, 0, z, -1,
-            0, 0, t, 1
-        ];
-    }
-
-    static product(a, b, c) {
+    static multiply(a, b, c) {
         const [a00, a01, a02, a03, a10, a11, a12, a13, a20, a21, a22, a23, a30, a31, a32, a33] = a;
         const [b00, b01, b02, b03, b10, b11, b12, b13, b20, b21, b22, b23, b30, b31, b32, b33] = b;
         c[0] = a00 * b00 + a10 * b01 + a20 * b02 + a30 * b03;
@@ -48,6 +27,6 @@ export class Matrix4 extends VirtualArray {
     }
 
     multiply(factor, product = new Matrix4()) {
-        Matrix4.product(this.array, factor.array, product.array);
+        Matrix4.multiply(this.array, factor.array, product.array);
     }
 }
