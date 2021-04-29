@@ -1,55 +1,23 @@
-import { Vector2 } from './vector2.js';
-
-export class Vector3 extends Vector2 {
-    constructor(identity = [0, 0, 0], type = Float32Array) {
-        super(identity, type);
+export class Vector3 extends Float32Array {
+    constructor() {
+        super([0, 0, 0]);
     }
 
-    get z() { return this.array[2]; }
-    set z(value) { this.array[2] = value; }
-
-    static distance = (v3a, v3b) => Math.sqrt(Vector3.distanceSquared(v3a, v3b));
-
-    static distanceSquared = (v3a, v3b) => Math.sqr(v3a[0] - v3b[0]) + Math.sqr(v3a[1] - v3b[1]) + Math.sqr(v3a[2] - v3b[2]);
-
-    static dot = (v3a, v3b) => v3a[0] * v3b[0] + v3a[1] * v3b[1] + v3a[2] * v3b[2];
-
-    static cross(v3a, v3b, v3c = new Vector3()) {
-        v3c[0] = v3a[1] * v3b[2] - v3a[2] * v3b[1];
-        v3c[1] = v3a[2] * v3b[0] - v3a[0] * v3b[2];
-        v3c[2] = v3a[0] * v3b[1] - v3a[1] * v3b[0];
-        return v3c;
+    get x() { return this[0]; }
+    set x(value) {
+        this.changed = true;
+        this[0] = value;
     }
 
-    static normalize(v3a, v3b = v3a) {
-        const m = 1 / Math.hypot(v3a[0], v3a[1], v3a[2]);
-        v3a[0] *= m;
-        v3a[1] *= m;
-        v3a[2] *= m;
-        return v3b;
+    get y() { return this[1]; }
+    set y(value) {
+        this.changed = true;
+        this[1] = value;
     }
 
-    static sum(v3a, v3b, v3c = new Vector3()) {
-        Vector2.sum(v3a, v3b, v3c);
-        v3c[2] = v3a[2] + v3b[2];
-        return v3c;
-    }
-
-    static difference(v3a, v3b, v3c = new Vector3()) {
-        Vector2.difference(v3a, v3b, v3c);
-        v3c[2] = v3a[2] - v3b[2];
-        return v3c;
-    }
-
-    static product(v3a, v3b, v3c = new Vector3()) {
-        Vector2.product(v3a, v3b, v3c);
-        v3c[2] = v3a[2] * v3b[2];
-        return v3c;
-    }
-
-    static quotient(v3a, v3b, v3c = new Vector3()) {
-        Vector2.quotient(v3a, v3b, v3c);
-        v3c[2] = v3a[2] / v3b[2];
-        return v3c;
+    get z() { return this[2]; }
+    set z(value) {
+        this.changed = true;
+        this[2] = value;
     }
 }

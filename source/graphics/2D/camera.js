@@ -1,4 +1,4 @@
-import { Matrix3 } from "../matrix3.js";
+import { Matrix3 } from '../matrix3.js';
 
 // TODO: Add view matrix.
 export class Camera extends Matrix3 {

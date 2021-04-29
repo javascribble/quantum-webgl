@@ -4,17 +4,15 @@ export class Angle {
 
     get radians() { return this.#radians; }
     set radians(value) {
-        this.#radians = value % 360;
-        this.#degrees = Angle.radiansToDegrees(this.#radians);
+        this.changed = true;
+        this.#radians = value % (2 * Math.PI);
+        this.#degrees = this.#radians * 180 / Math.PI;
     }
 
     get degrees() { return this.#degrees; }
     set degrees(value) {
-        this.#degrees = value % (2 * Math.PI);
-        this.#radians = Angle.degreesToRadians(this.#degrees);
+        this.changed = true;
+        this.#degrees = value % 360;
+        this.#radians = this.#degrees * Math.PI / 180;
     }
-
-    static radiansToDegrees = radians => radians * 180 / Math.PI;
-
-    static degreesToRadians = degrees => degrees * Math.PI / 180;
 }
