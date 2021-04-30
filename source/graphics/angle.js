@@ -1,18 +1,22 @@
-export class Angle {
-    #radians = 0;
+export class Angle extends Float32Array {
     #degrees = 0;
 
-    get radians() { return this.#radians; }
+    constructor(array = [0], offset = 0, length = 1) {
+        super(array, offset, length);
+    }
+
+    get radians() { return this[0]; }
     set radians(value) {
         this.changed = true;
-        this.#radians = value % (2 * Math.PI);
-        this.#degrees = this.#radians * 180 / Math.PI;
+        const radians = value % (2 * Math.PI);
+        this.#degrees = radians * 180 / Math.PI;
+        this[0] = radians;
     }
 
     get degrees() { return this.#degrees; }
     set degrees(value) {
         this.changed = true;
         this.#degrees = value % 360;
-        this.#radians = this.#degrees * Math.PI / 180;
+        this[0] = this.#degrees * Math.PI / 180;
     }
 }

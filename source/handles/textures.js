@@ -1,8 +1,11 @@
 ﻿import { textureOptions } from '../constants/context.js';
 
+// TODO: Find a better place for this.
+const mapEntries = (object, predicate) => Object.fromEntries(Object.entries(object).map(predicate));
+
 export const createTexture = (configuration, context) => {
     const texture = {
-        parameters: Object.fromEntries(Object.entries({ ...textureOptions, ...configuration.parameters }).map(([key, value]) => [context[key] || key, context[value] || value])),
+        parameters: mapEntries({ ...textureOptions, ...configuration.parameters }, ([name, value]) => [context[name] || name, context[value] || value]),
         target: context[configuration.target] || configuration.target || context.TEXTURE_2D,
         type: context[configuration.type] || configuration.type || context.UNSIGNED_BYTE,
         format: context[configuration.format] || configuration.format || context.RGBA,

@@ -1,6 +1,6 @@
 export class Vector2 extends Float32Array {
-    constructor() {
-        super([0, 0]);
+    constructor(array = [0, 0], offset = 0, length = 2) {
+        super(array, offset, length);
     }
 
     get x() { return this[0]; }
@@ -15,30 +15,33 @@ export class Vector2 extends Float32Array {
         this[1] = value;
     }
 
-    add(addend, sum = this) {
-        for (let i = 0; i < this.length; i++) sum[i] = this[i] + addend[i];
+    static distance = (a, b) => Math.sqrt(a.reduce((d, v, i) => d + Math.pow(v - b[i], 2)));
+
+    static sum(a, b, sum = new this.constructor()) {
+        for (let i = 0; i < sum.length; i++) sum[i] = a[i] + b[i];
+        return sum;
     }
 
-    subtract(subtrahend, difference = this) {
-        for (let i = 0; i < this.length; i++) difference[i] = this[i] - subtrahend[i];
+    static difference(a, b, difference = new this.constructor()) {
+        for (let i = 0; i < difference.length; i++) difference[i] = a[i] - b[i];
+        return difference;
     }
 
-    multiply(multiplier, product = this) {
-        for (let i = 0; i < this.length; i++) product[i] = this[i] * multiplier[i];
+    static normalize(vector, result = new this.constructor()) {
+        const magnitude = 1 / Math.hypot(...vector);
+        for (let i = 0; i < vector.length; i++) result[i] = vector[i] * magnitude;
+        return result;
     }
 
-    divide(divisor, quotient = this) {
-        for (let i = 0; i < this.length; i++) quotient[i] = this[i] / divisor[i];
+    add(...addends) {
+        addends.forEach(addend => this.constructor.sum(this, addend, this));
+    }
+
+    subtract(...subtrahends) {
+        subtrahends.forEach(subtrahend => this.constructor.difference(this, subtrahend, this));
     }
 
     normalize() {
-        const magnitude = 1 / Math.hypot(...this);
-        for (let i = 0; i < this.length; i++) this[i] *= magnitude;
-    }
-
-    distance(point) {
-        let distance = 0;
-        for (let i = 0; i < this.length; i++) distance += Math.pow(this[i] - point[i], 2);
-        return Math.sqrt(distance);
+        this.constructor.normalize(this, this);
     }
 }
