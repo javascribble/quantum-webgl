@@ -2,20 +2,19 @@ import { WebGL } from '../elements/webgl.js';
 import { useProgram } from '../handles/programs.js';
 import { bindBuffer, bufferData } from '../handles/buffers.js';
 import { bindTexture, bufferTexture } from '../handles/textures.js';
-import { Matrix3 } from '../geometry/matrix3.js';
+import { Matrix3 } from '../graphics/matrix3.js';
 
 WebGL.prototype.Sprite = class Sprite {
     constructor(context) {
         const modelBuffer = context.buffers.get('model');
         if (!modelBuffer.data) {
-            modelBuffer.data = new Matrix3().array;
+            modelBuffer.data = new Matrix3();
             modelBuffer.changed = true;
         }
 
         this.program = context.programs.get('default');
         this.buffers = [context.buffers.get('quad'), modelBuffer];
         this.textures = [context.textures.get('default')];
-
     }
 
     draw(context) {

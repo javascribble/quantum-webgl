@@ -4,7 +4,7 @@ import '/source/extensions/node.js';
 import '/source/extensions/sprite.js';
 import '/source/main.js';
 
-import { Camera } from '/source/geometry/2D/camera.js';
+import { Camera } from '/source/graphics/2D/camera.js';
 
 const display = document.querySelector('#display');
 const webgl = document.querySelector('quantum-webgl');
