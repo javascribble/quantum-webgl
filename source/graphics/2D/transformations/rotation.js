@@ -3,12 +3,25 @@ import { Angle } from '../../angle.js';
 
 export class Rotation extends Angle {
     #matrix = new Matrix3();
+    #changed = false;
+
+    get changed() { return this.#changed; }
+
+    set radians(value) {
+        super.radians = value;
+        this.#changed = true;
+    }
+
+    set degrees(value) {
+        super.degrees = value;
+        this.#changed = true;
+    }
 
     get matrix() {
-        if (this.changed) {
-            this.changed = false;
+        if (this.#changed) {
+            this.#changed = false;
 
-            const radians = this.radians;
+            const radians = this[0];
             const sine = Math.sin(radians);
             const cosine = Math.cos(radians);
 
@@ -18,5 +31,7 @@ export class Rotation extends Angle {
             matrix[3] = sine;
             matrix[4] = cosine;
         }
+
+        return this.#matrix;
     }
 }

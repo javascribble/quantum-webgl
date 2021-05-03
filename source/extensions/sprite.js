@@ -1,39 +1,36 @@
 import { WebGL } from '../elements/webgl.js';
+import { Matrix3 } from '../graphics/matrix3.js';
+import { Transform } from '../graphics/2D/transform.js';
 import { useProgram } from '../handles/programs.js';
 import { bindBuffer, bufferData } from '../handles/buffers.js';
 import { bindTexture, bufferTexture } from '../handles/textures.js';
-import { Matrix3 } from '../graphics/matrix3.js';
 
-WebGL.prototype.Sprite = class Sprite {
+WebGL.prototype.Sprite = class Sprite extends Transform {
+    matrix = new Matrix3();
+
     constructor(context) {
-        const modelBuffer = context.buffers.get('model');
-        if (!modelBuffer.data) {
-            modelBuffer.data = new Matrix3();
-            modelBuffer.changed = true;
-        }
-
         this.program = context.programs.get('default');
         this.buffers = [context.buffers.get('quad'), modelBuffer];
         this.textures = [context.textures.get('default')];
     }
 
-    draw(context) {
+    draw(context, state = {}) {
         const { program, buffers, textures } = this;
-        if (context.program !== program) {
+        if (state.program !== program) {
             useProgram(program, context);
-            context.program = program;
-            context.bind = true;
+            state.program = program;
+            state.bind = true;
         }
 
         for (const uniform of program.uniforms) {
-            if (context.bind || uniform.changed) {
-                program[uniform.name](uniform.value?.array || uniform.value);
+            if (state.bind || uniform.changed) {
+                program[uniform.name](uniform.value);
                 uniform.changed = false;
             }
         }
 
         for (const buffer of buffers) {
-            if (context.bind) {
+            if (state.bind) {
                 bindBuffer(buffer, context);
                 for (const attribute of buffer.attributes) {
                     program[attribute.name](attribute);
@@ -46,19 +43,19 @@ WebGL.prototype.Sprite = class Sprite {
             }
         }
 
-        if (context.bind) {
-            for (const texture of textures) {
+        for (const texture of textures) {
+            if (state.bind) {
                 texture.unit = 0;// TODO: Determine available texture slot.
                 bindTexture(texture, context);
-                if (texture.changed) {
-                    bufferTexture(texture, context);
-                    texture.changed = false;
-                }
             }
 
-            context.bind = false;
+            if (texture.changed) {
+                bufferTexture(texture, context);
+                texture.changed = false;
+            }
         }
 
+        state.bind = false;
         context.drawArraysInstanced(context.TRIANGLE_STRIP, 0, 4, 1);
     }
 };

@@ -4,16 +4,10 @@ export class Vector2 extends Float32Array {
     }
 
     get x() { return this[0]; }
-    set x(value) {
-        this.changed = true;
-        this[0] = value;
-    }
+    set x(value) { this[0] = value; }
 
     get y() { return this[1]; }
-    set y(value) {
-        this.changed = true;
-        this[1] = value;
-    }
+    set y(value) { this[1] = value; }
 
     static distance = (a, b) => Math.sqrt(a.reduce((d, v, i) => d + Math.pow(v - b[i], 2)));
 

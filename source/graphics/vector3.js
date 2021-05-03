@@ -6,10 +6,7 @@ export class Vector3 extends Vector2 {
     }
 
     get z() { return this[2]; }
-    set z(value) {
-        this.changed = true;
-        this[2] = value;
-    }
+    set z(value) { this[2] = value; }
 
     static dot = (a, b) => a.reduce((d, v, i) => d + v * b[i]);
 

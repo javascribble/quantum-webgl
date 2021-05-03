@@ -1,17 +1,12 @@
-﻿import { ResizableArray } from '../collections/arrays.js';
-
-export const createBuffer = (configuration, context) => {
+﻿export const createBuffer = (configuration, context) => {
     const buffer = {
         target: context[configuration.target] || configuration.target || context.ARRAY_BUFFER,
-        usage: context[configuration.usage] || configuration.usage || context.STATIC_DRAW,
+        usage: context[configuration.usage] || configuration.usage || context.DYNAMIC_DRAW,
         attributes: [...configuration.attributes], // TODO: Deep clone?
-        offset: configuration.offset || 0
+        data: new Float32Array(configuration.data || 0),
+        offset: configuration.offset || 0,
+        changed: !!configuration.data
     };
-
-    if (configuration.data) {
-        buffer.data = new Float32Array(configuration.data);
-        buffer.changed = true;
-    }
 
     restoreBuffer(buffer, context);
     return buffer;

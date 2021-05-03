@@ -43,6 +43,7 @@ webgl.context.allocate({
     buffers: [
         {
             name: 'quad',
+            usage: 'STATIC_DRAW',
             data: [
                 -1, 1, 0.0, 1.0,
                 -1, -1, 0.0, 0.0,
@@ -66,7 +67,6 @@ webgl.context.allocate({
         },
         {
             name: 'model',
-            usage: 'DYNAMIC_DRAW',
             attributes: [
                 {
                     name: 'modelTransform',
@@ -95,8 +95,8 @@ const animation = quantum.animate(({ delta }) => {
     const fps = Math.trunc(1000 / delta);
 
     for (let i = 0; i < 10; i++) {
-        const node = new Node();
-        node.drawables.push(sprite);
+        const node = new Node(webgl.context, i);
+        node.children.push(sprite);
         root.children.push(node);
         count++;
     }
