@@ -1,12 +1,11 @@
-import { Matrix3 } from '../matrix3.js';
+import { Transform } from './transform.js';
+import { Projection } from './transformations/projection.js';
+import { draw } from '../../renderer/draw.js';
 
-export class Camera extends Matrix3 {
-    static orthographic(size = 1, aspect = 1) {
-        const y = 1 / size, x = y / aspect;
-        return new Camera([
-            x, 0, 0,
-            0, y, 0,
-            0, 0, 1
-        ]);
+export class Camera extends Projection {
+    transform = new Transform();
+
+    render(context, drawables) {
+        draw(context, drawables);
     }
 }

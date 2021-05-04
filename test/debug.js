@@ -5,12 +5,17 @@ import '/source/extensions/sprite.js';
 import '/source/main.js';
 
 import { Camera } from '/source/graphics/2D/camera.js';
+import { draw } from '/source/renderer/draw.js';
 
 const display = document.querySelector('#display');
 const webgl = document.querySelector('quantum-webgl');
 const image = document.querySelector('img');
 
-webgl.context.allocate({
+const camera = new Camera();
+camera.orthographic(10);
+
+const { Node, Sprite, context } = webgl;
+context.allocate({
     shaders: [
         {
             name: 'vertex',
@@ -31,7 +36,7 @@ webgl.context.allocate({
             uniforms: [
                 {
                     name: 'projectionView',
-                    value: Camera.orthographic(10)
+                    value: camera
                 },
                 {
                     name: 'sampler0',
@@ -67,6 +72,7 @@ webgl.context.allocate({
         },
         {
             name: 'model',
+            data: [],
             attributes: [
                 {
                     name: 'modelTransform',
@@ -86,34 +92,42 @@ webgl.context.allocate({
     ]
 });
 
-const { Node, Sprite } = webgl;
+const dynamicBuffer = context.buffers.get('model');
 
 let count = 0;
-const root = new Node();
-const sprite = new Sprite(webgl.context);
+const drawables = [];
 const animation = quantum.animate(({ delta }) => {
     const fps = Math.trunc(1000 / delta);
 
-    for (let i = 0; i < 10; i++) {
-        const node = new Node(webgl.context, i);
-        node.children.push(sprite);
-        root.children.push(node);
+    for (let i = 0; i < 50; i++) {
+        drawables.push(new Sprite(context));
         count++;
     }
 
-    for (const { transform } of root.children) {
-        const { translation, rotation, scale } = transform;
-        rotation.z = Math.random() * Math.PI;
-        translation.x = (translation.x + Math.random() * 10) % webgl.clientWidth;
-        translation.y = (translation.y + Math.random() * 10) % webgl.clientHeight;
+    for (const drawable of drawables) {
+        const { translation, rotation, scale } = drawable;
+        rotation.radians = Math.random() * Math.PI;
+        translation.x = Math.random() * 20 - 10;
+        translation.y = Math.random() * 20 - 10;
     }
 
-    webgl.context.clear(webgl.context.DEPTH_BUFFER_BIT);
-    root.draw(webgl.context);
+    const length = count * 9;
+    if (dynamicBuffer.data.length < length) {
+        const expandedBuffer = new Float32Array(length);
+        for (let i = 0; i < count; i++) {
+            expandedBuffer.set(drawables[i].matrix, i * 9, 9);
+        }
+
+        dynamicBuffer.data = expandedBuffer;
+        dynamicBuffer.changed = true;
+    }
+
+    context.clear(context.DEPTH_BUFFER_BIT);
+    camera.render(context, drawables);
 
     display.innerHTML = `FPS: ${fps} Count: ${count}`;
 
-    if (fps < 30) {
+    if (fps > 0 && fps < 30) {
         animation.stop();
     }
 });

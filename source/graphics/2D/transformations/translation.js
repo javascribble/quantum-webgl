@@ -7,11 +7,13 @@ export class Translation extends Vector2 {
 
     get changed() { return this.#changed; }
 
+    get x() { return super.x; }
     set x(value) {
         super.x = value;
         this.#changed = true;
     }
 
+    get y() { return super.y; }
     set y(value) {
         super.y = value;
         this.#changed = true;
@@ -22,8 +24,8 @@ export class Translation extends Vector2 {
             this.#changed = false;
 
             const matrix = this.#matrix;
-            matrix[0] = this.x;
-            matrix[4] = this.y;
+            matrix[6] = this.x;
+            matrix[7] = this.y;
         }
 
         return this.#matrix;

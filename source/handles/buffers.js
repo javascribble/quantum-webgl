@@ -3,10 +3,13 @@
         target: context[configuration.target] || configuration.target || context.ARRAY_BUFFER,
         usage: context[configuration.usage] || configuration.usage || context.DYNAMIC_DRAW,
         attributes: [...configuration.attributes], // TODO: Deep clone?
-        data: new Float32Array(configuration.data || 0),
-        offset: configuration.offset || 0,
-        changed: !!configuration.data
+        offset: configuration.offset || 0
     };
+
+    if (configuration.data) {
+        buffer.data = new Float32Array(configuration.data);
+        buffer.changed = true;
+    }
 
     restoreBuffer(buffer, context);
     return buffer;
@@ -22,6 +25,8 @@ export const bufferData = (buffer, context) => {
     } else {
         context.bufferData(buffer.target, buffer.data, buffer.usage);
     }
+
+    buffer.changed = false;
 };
 
 export const deleteBuffer = (buffer, context) => context.deleteBuffer(buffer.handle);

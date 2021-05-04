@@ -7,11 +7,13 @@ export class Rotation extends Angle {
 
     get changed() { return this.#changed; }
 
+    get radians() { return super.radians; }
     set radians(value) {
         super.radians = value;
         this.#changed = true;
     }
 
+    get degrees() { return super.degrees; }
     set degrees(value) {
         super.degrees = value;
         this.#changed = true;
