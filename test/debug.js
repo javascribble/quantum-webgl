@@ -111,6 +111,7 @@ const animation = quantum.animate(({ delta }) => {
         translation.y = Math.random() * 20 - 10;
     }
 
+    // TODO: Implement resizable array.
     const length = count * 9;
     if (dynamicBuffer.data.length < length) {
         const expandedBuffer = new Float32Array(length);
