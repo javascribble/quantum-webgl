@@ -6,8 +6,12 @@ export const applyConfigurations = context => {
     }
 
     // TODO: Make these flexible.
-    context.enable(context.BLEND);
-    context.blendFunc(context.ONE, context.ONE_MINUS_SRC_ALPHA);
     context.pixelStorei(context.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
     context.pixelStorei(context.UNPACK_FLIP_Y_WEBGL, true);
+
+    context.enable(context.DEPTH_TEST);
+    context.depthFunc(context.LEQUAL);
+
+    context.enable(context.BLEND);
+    context.blendFunc(context.ONE, context.ONE_MINUS_SRC_ALPHA);
 };

@@ -11,8 +11,9 @@ const display = document.querySelector('#display');
 const webgl = document.querySelector('quantum-webgl');
 const image = document.querySelector('img');
 
+const size = 100;
 const camera = new Camera();
-camera.orthographic(10);
+camera.orthographic(size);
 
 const { Node, Sprite, context } = webgl;
 context.allocate({
@@ -20,12 +21,31 @@ context.allocate({
         {
             name: 'vertex',
             type: 'VERTEX_SHADER',
-            source: document.querySelector('[type="x-shader/x-vertex"]').text
+            source: `                    
+                uniform mat3 projectionView;
+                attribute mat3 modelTransform;
+                attribute vec2 vertexPosition;
+                attribute vec2 vertexCoordinate;
+                varying vec2 fragmentCoordinate;
+
+                void main() {
+                    gl_Position = vec4((projectionView * modelTransform * vec3(vertexPosition, 1)), 1);
+
+                    fragmentCoordinate = vertexCoordinate;
+                }`
         },
         {
             name: 'fragment',
             type: 'FRAGMENT_SHADER',
-            source: document.querySelector('[type="x-shader/x-fragment"]').text
+            source: `                    
+                precision mediump float;
+
+                uniform sampler2D sampler0;
+                varying vec2 fragmentCoordinate;
+
+                void main() {
+                    gl_FragColor = texture2D(sampler0, fragmentCoordinate);
+                }`
         }
     ],
     programs: [
@@ -92,38 +112,34 @@ context.allocate({
     ]
 });
 
-const dynamicBuffer = context.buffers.get('model');
-
-let count = 0;
+// TODO: Implement resizable array.
+const count = 1000;
 const drawables = [];
+const length = count * 9;
+const buffer = new Float32Array(length);
+
+const dynamicBuffer = context.buffers.get('model');
+dynamicBuffer.data = buffer;
+dynamicBuffer.changed = true;
+
+for (let i = 0; i < count; i++) {
+    const sprite = new Sprite(context);
+    sprite.connect(buffer, i * 9);
+    drawables.push(sprite);
+}
+
 const animation = quantum.animate(({ delta }) => {
     const fps = Math.trunc(1000 / delta);
 
-    for (let i = 0; i < 50; i++) {
-        drawables.push(new Sprite(context));
-        count++;
-    }
-
+    dynamicBuffer.changed = true;
     for (const drawable of drawables) {
-        const { translation, rotation, scale } = drawable;
-        rotation.radians = Math.random() * Math.PI;
-        translation.x = Math.random() * 20 - 10;
-        translation.y = Math.random() * 20 - 10;
+        const { translation } = drawable;
+        translation.x = Math.random() * size * 2 - size;
+        translation.y = Math.random() * size * 2 - size;
+        drawable.update();
     }
 
-    // TODO: Implement resizable array.
-    const length = count * 9;
-    if (dynamicBuffer.data.length < length) {
-        const expandedBuffer = new Float32Array(length);
-        for (let i = 0; i < count; i++) {
-            expandedBuffer.set(drawables[i].matrix, i * 9, 9);
-        }
-
-        dynamicBuffer.data = expandedBuffer;
-        dynamicBuffer.changed = true;
-    }
-
-    context.clear(context.DEPTH_BUFFER_BIT);
+    //context.clear(context.DEPTH_BUFFER_BIT);
     camera.render(context, drawables);
 
     display.innerHTML = `FPS: ${fps} Count: ${count}`;

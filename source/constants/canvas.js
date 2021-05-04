@@ -5,5 +5,5 @@ export const canvasOptions = {
     antialias: false,
     desynchronized: true,
     premultipliedAlpha: true,
-    preserveDrawingBuffer: false
+    preserveDrawingBuffer: true
 };
