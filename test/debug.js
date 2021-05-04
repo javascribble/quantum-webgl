@@ -5,7 +5,6 @@ import '/source/extensions/sprite.js';
 import '/source/main.js';
 
 import { Camera } from '/source/graphics/2D/camera.js';
-import { draw } from '/source/renderer/draw.js';
 
 const display = document.querySelector('#display');
 const webgl = document.querySelector('quantum-webgl');
@@ -113,7 +112,7 @@ context.allocate({
 });
 
 // TODO: Implement resizable array.
-const count = 1000;
+const count = 1500;
 const drawables = [];
 const length = count * 9;
 const buffer = new Float32Array(length);
@@ -139,7 +138,6 @@ const animation = quantum.animate(({ delta }) => {
         drawable.update();
     }
 
-    //context.clear(context.DEPTH_BUFFER_BIT);
     camera.render(context, drawables);
 
     display.innerHTML = `FPS: ${fps} Count: ${count}`;
