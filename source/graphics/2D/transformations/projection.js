@@ -30,6 +30,12 @@ export class Projection {
                 0, y, 0,
                 0, 0, -1
             ]);
+
+            /*
+                2 / w, 0, 0,
+                0, -2 / h, 0,
+                -1, 1, 1
+            */
         }
 
         return this.#matrix;

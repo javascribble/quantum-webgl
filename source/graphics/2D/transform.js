@@ -17,6 +17,7 @@ export class Transform {
     get matrix() {
         if (this.changed) {
             Matrix3.compose(Matrix3.compose(this.translation.matrix, this.rotation.matrix), this.scale.matrix, this.#matrix);
+            // Add origin.
         }
 
         return this.#matrix;
