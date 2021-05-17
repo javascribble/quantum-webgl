@@ -10,9 +10,9 @@ const display = document.querySelector('#display');
 const webgl = document.querySelector('quantum-webgl');
 const image = document.querySelector('img');
 
-const size = 100;
+const size = 10;
 const camera = new Camera();
-camera.orthographic(size);
+camera.projection.size = size;
 
 const { Node, Sprite, context } = webgl;
 context.allocate({
@@ -28,7 +28,7 @@ context.allocate({
                 varying vec2 fragmentCoordinate;
 
                 void main() {
-                    gl_Position = vec4((projectionView * modelTransform * vec3(vertexPosition, 1)), 1);
+                    gl_Position = vec4(projectionView * modelTransform * vec3(vertexPosition, 1), 1);
 
                     fragmentCoordinate = vertexCoordinate;
                 }`
@@ -55,7 +55,7 @@ context.allocate({
             uniforms: [
                 {
                     name: 'projectionView',
-                    value: camera
+                    value: camera.matrix
                 },
                 {
                     name: 'sampler0',
@@ -91,7 +91,6 @@ context.allocate({
         },
         {
             name: 'model',
-            data: [],
             attributes: [
                 {
                     name: 'modelTransform',
@@ -112,7 +111,7 @@ context.allocate({
 });
 
 // TODO: Implement resizable array.
-const count = 1500;
+const count = 10000;
 const drawables = [];
 const length = count * 9;
 const buffer = new Float32Array(length);
@@ -132,9 +131,11 @@ const animation = quantum.animate(({ delta }) => {
 
     dynamicBuffer.changed = true;
     for (const drawable of drawables) {
-        const { translation } = drawable;
+        const { translation, rotation, scale } = drawable;
         translation.x = Math.random() * size * 2 - size;
         translation.y = Math.random() * size * 2 - size;
+        scale.x = Math.random();
+        scale.y = Math.random();
         drawable.update();
     }
 
@@ -143,7 +144,7 @@ const animation = quantum.animate(({ delta }) => {
     display.innerHTML = `FPS: ${fps} Count: ${count}`;
 
     if (fps > 0 && fps < 30) {
-        animation.stop();
+        //animation.stop();
     }
 });
 

@@ -20,13 +20,12 @@ export const restoreBuffer = (buffer, context) => buffer.handle = context.create
 export const bindBuffer = (buffer, context) => context.bindBuffer(buffer.target, buffer.handle);
 
 export const bufferData = (buffer, context) => {
-    if (buffer.offset) {
+    if (buffer.offset || buffer.buffered) {
         context.bufferSubData(buffer.target, buffer.offset, buffer.data);
     } else {
         context.bufferData(buffer.target, buffer.data, buffer.usage);
+        buffer.buffered = true;
     }
-
-    buffer.changed = false;
 };
 
 export const deleteBuffer = (buffer, context) => context.deleteBuffer(buffer.handle);

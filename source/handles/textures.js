@@ -32,7 +32,6 @@ export const bufferTexture = (texture, context) => {
     }
 
     context.texImage2D(texture.target, /* mipmap */ 0, texture.format, texture.format, texture.type, texture.data);
-    texture.changed = false;
 };
 
 export const deleteTexture = (texture, context) => context.deleteTexture(texture.handle);

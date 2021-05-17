@@ -1,24 +1,26 @@
 import { useProgram } from '../handles/programs.js';
 import { bindBuffer, bufferData } from '../handles/buffers.js';
 import { bindTexture, bufferTexture } from '../handles/textures.js';
+import { bind } from './bind.js';
+import { buffer } from './buffer.js';
 
-export const draw = (context, drawables, state = {}) => {
+export const draw = (context, drawables) => {
     for (const { program, buffers, textures } of drawables) {
-        if (state.program !== program) {
+        if (context.program !== program) {
             useProgram(program, context);
-            state.program = program;
-            state.bind = true;
+            context.program = program;
+            context.bind = true;
         }
 
         for (const uniform of program.uniforms) {
-            if (state.bind || uniform.changed) {
+            if (context.bind || uniform.changed) {
                 program[uniform.name](uniform.value);
                 uniform.changed = false;
             }
         }
 
         for (const buffer of buffers) {
-            if (state.bind) {
+            if (context.bind) {
                 bindBuffer(buffer, context);
                 for (const attribute of buffer.attributes) {
                     program[attribute.name](attribute);
@@ -27,24 +29,27 @@ export const draw = (context, drawables, state = {}) => {
 
             if (buffer.changed) {
                 bufferData(buffer, context);
+                buffer.changed = false;
             }
         }
 
         for (const texture of textures) {
-            if (state.bind) {
+            if (context.bind) {
                 texture.unit = 0;// TODO: Determine available texture slot.
                 bindTexture(texture, context);
             }
 
             if (texture.changed) {
                 bufferTexture(texture, context);
+                texture.changed = false;
             }
         }
 
-        state.bind = false;
-        //context.drawArrays(mode, offset, count);
-        //context.drawElements(mode, count, type, offset);
-        context.drawArraysInstanced(context.TRIANGLE_STRIP, 0, 4, drawables.length);
-        //context.drawElementsInstanced(mode, count, type, offset, instances);
+        context.bind = false;
     }
+
+    //context.drawArrays(mode, offset, count);
+    //context.drawElements(mode, count, type, offset);
+    context.drawArraysInstanced(context.TRIANGLE_STRIP, 0, 4, drawables.length);
+    //context.drawElementsInstanced(mode, count, type, offset, instances);
 };
