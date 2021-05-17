@@ -1,13 +1,11 @@
 import { useProgram } from '../handles/programs.js';
 import { bindBuffer, bufferData } from '../handles/buffers.js';
 import { bindTexture, bufferTexture } from '../handles/textures.js';
-import { bind } from './bind.js';
-import { buffer } from './buffer.js';
 
 export const draw = (context, drawables) => {
     for (const { program, buffers, textures } of drawables) {
         if (context.program !== program) {
-            useProgram(program, context);
+            useProgram(program, context); // Draw between batches.
             context.program = program;
             context.bind = true;
         }

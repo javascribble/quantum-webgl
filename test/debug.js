@@ -111,7 +111,7 @@ context.allocate({
 });
 
 // TODO: Implement resizable array.
-const count = 10000;
+const count = 20000;
 const drawables = [];
 const length = count * 9;
 const buffer = new Float32Array(length);
