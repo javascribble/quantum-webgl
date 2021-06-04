@@ -23,19 +23,13 @@ export class Projection {
     get matrix() {
         if (this.#changed) {
             this.#changed = false;
-            const y = 1 / this.#size;
-            const x = y / this.#aspect;
+            const y = 1 / this.#size; // -2 / h
+            const x = y / this.#aspect; // 2 / w
             this.#matrix.set([
                 x, 0, 0,
                 0, y, 0,
-                0, 0, -1
+                0, 0, -1 //-1, 1, 1
             ]);
-
-            /*
-                2 / w, 0, 0,
-                0, -2 / h, 0,
-                -1, 1, 1
-            */
         }
 
         return this.#matrix;

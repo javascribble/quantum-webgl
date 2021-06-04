@@ -11,31 +11,24 @@ export class Vector2 extends Float32Array {
 
     static distance = (a, b) => Math.sqrt(a.reduce((d, v, i) => d + Math.pow(v - b[i], 2)));
 
-    static sum(a, b, sum = new this.constructor()) {
-        for (let i = 0; i < sum.length; i++) sum[i] = a[i] + b[i];
-        return sum;
-    }
-
-    static difference(a, b, difference = new this.constructor()) {
-        for (let i = 0; i < difference.length; i++) difference[i] = a[i] - b[i];
-        return difference;
-    }
-
-    static normalize(vector, result = new this.constructor()) {
-        const magnitude = 1 / Math.hypot(...vector);
-        for (let i = 0; i < vector.length; i++) result[i] = vector[i] * magnitude;
-        return result;
-    }
-
     add(...addends) {
-        addends.forEach(addend => this.constructor.sum(this, addend, this));
+        for (const addend of addends) {
+            for (let i = 0; i < this.length; i++) {
+                this[i] += addend[i];
+            }
+        }
     }
 
     subtract(...subtrahends) {
-        subtrahends.forEach(subtrahend => this.constructor.difference(this, subtrahend, this));
+        for (const subtrahend of subtrahends) {
+            for (let i = 0; i < this.length; i++) {
+                this[i] -= subtrahend[i];
+            }
+        }
     }
 
     normalize() {
-        this.constructor.normalize(this, this);
+        const magnitude = 1 / Math.hypot(...this);
+        for (let i = 0; i < this.length; i++) this[i] *= magnitude;
     }
 }

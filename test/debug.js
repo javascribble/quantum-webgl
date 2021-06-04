@@ -1,20 +1,19 @@
 import '/node_modules/@javascribble/quantum/source/main.js';
 import '/node_modules/@javascribble/quantum-canvas/source/main.js';
-import '/source/extensions/node.js';
-import '/source/extensions/sprite.js';
+import '/source/extensions/2D.js';
 import '/source/main.js';
 
-import { Camera } from '/source/graphics/2D/camera.js';
+import { draw } from '/source/renderer/draw.js';
 
 const display = document.querySelector('#display');
 const webgl = document.querySelector('quantum-webgl');
 const image = document.querySelector('img');
+const { Camera, Sprite, context } = webgl;
 
 const size = 10;
 const camera = new Camera();
 camera.projection.size = size;
 
-const { Node, Sprite, context } = webgl;
 context.allocate({
     shaders: [
         {
@@ -110,41 +109,38 @@ context.allocate({
     ]
 });
 
-// TODO: Implement resizable array.
-const count = 20000;
-const drawables = [];
-const length = count * 9;
-const buffer = new Float32Array(length);
-
 const dynamicBuffer = context.buffers.get('model');
-dynamicBuffer.data = buffer;
-dynamicBuffer.changed = true;
+const buffer = new Float32Array(300000); // TODO: Resize.
 
-for (let i = 0; i < count; i++) {
-    const sprite = new Sprite(context);
-    sprite.connect(buffer, i * 9);
-    drawables.push(sprite);
-}
+const program = context.programs.get('default');
+const buffers = [context.buffers.get('quad'), context.buffers.get('model')];
+const textures = [context.textures.get('default')];
 
+const drawables = [];
 const animation = quantum.animate(({ delta }) => {
     const fps = Math.trunc(1000 / delta);
 
-    dynamicBuffer.changed = true;
-    for (const drawable of drawables) {
+    for (let i = 0; i < 300; i++) {
+        drawables.push(new Sprite(program, buffers, textures));
+    }
+
+    for (let i = 0; i < drawables.length; i++) {
+        const drawable = drawables[i];
         const { translation, rotation, scale } = drawable;
         translation.x = Math.random() * size * 2 - size;
         translation.y = Math.random() * size * 2 - size;
-        scale.x = Math.random();
-        scale.y = Math.random();
-        drawable.update();
+        buffer.set(drawable.matrix, i * 9);
     }
 
-    camera.render(context, drawables);
+    dynamicBuffer.changed = true;
+    dynamicBuffer.data = buffer.subarray(0, drawables.length * 9);
 
-    display.innerHTML = `FPS: ${fps} Count: ${count}`;
+    draw(context, drawables);
+
+    display.innerHTML = `FPS: ${fps} Count: ${drawables.length}`;
 
     if (fps > 0 && fps < 30) {
-        //animation.stop();
+        animation.stop();
     }
 });
 
