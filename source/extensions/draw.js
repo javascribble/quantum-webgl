@@ -1,11 +1,13 @@
+import { WebGL } from '../elements/webgl.js';
 import { useProgram } from '../handles/programs.js';
 import { bindBuffer, bufferData } from '../handles/buffers.js';
 import { bindTexture, bufferTexture } from '../handles/textures.js';
 
-export const draw = (context, drawables) => {
+WebGL.prototype.draw = function (drawables) {
+    const context = this.context;
     for (const { program, buffers, textures } of drawables) {
         if (context.program !== program) {
-            useProgram(program, context); // Draw between batches.
+            useProgram(program, context);
             context.program = program;
             context.bind = true;
         }
@@ -33,7 +35,7 @@ export const draw = (context, drawables) => {
 
         for (const texture of textures) {
             if (context.bind) {
-                texture.unit = 0;// TODO: Determine available texture slot.
+                texture.unit = 0; // TODO: Determine available texture slot.
                 bindTexture(texture, context);
             }
 

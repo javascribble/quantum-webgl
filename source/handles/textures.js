@@ -1,7 +1,5 @@
 ﻿import { textureOptions } from '../constants/context.js';
-
-// TODO: Find a better place for this.
-const mapEntries = (object, predicate) => Object.fromEntries(Object.entries(object).map(predicate));
+import { mapEntries } from '../utilities/objects.js';
 
 export const createTexture = (configuration, context) => {
     const texture = {

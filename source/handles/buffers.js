@@ -3,7 +3,8 @@
         target: context[configuration.target] || configuration.target || context.ARRAY_BUFFER,
         usage: context[configuration.usage] || configuration.usage || context.DYNAMIC_DRAW,
         attributes: [...configuration.attributes], // TODO: Deep clone?
-        offset: configuration.offset || 0
+        offset: configuration.offset || 0,
+        changed: !!configuration.data
     };
 
     restoreBuffer(buffer, context);
@@ -21,7 +22,7 @@ export const restoreBuffer = (buffer, context) => buffer.handle = context.create
 
 export const bindBuffer = (buffer, context) => context.bindBuffer(buffer.target, buffer.handle);
 
-export const bufferData = (buffer, context) => context.bufferSubData(buffer.target, buffer.offset, buffer.data.subarray(0, buffer.length));
+export const bufferData = (buffer, context) => context.bufferSubData(buffer.target, buffer.offset, buffer.data);
 
 export const resizeBuffer = (buffer, context) => context.bufferData(buffer.target, buffer.data, buffer.usage);
 
