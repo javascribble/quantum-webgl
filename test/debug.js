@@ -114,29 +114,22 @@ const program = context.programs.get('default');
 const buffers = [context.buffers.get('quad'), context.buffers.get('model')];
 const textures = [context.textures.get('default')];
 
-const dynamicBuffer = context.buffers.get('model');
-
 const drawables = [];
-for (let i = 0; i < 50000; i++) {
-    const drawable = new Sprite(program, buffers, textures);
-    drawables.push(drawable);
-    dynamicBuffer.data.set(drawable.matrix, i * 9);
-}
-
+const dynamicBuffer = context.buffers.get('model');
 const animation = quantum.animate(({ delta }) => {
     const fps = Math.trunc(1000 / delta);
 
-    // for (let i = 0; i < 100; i++) {
-    //     drawables.push(new Sprite(program, buffers, textures));
-    // }
+    for (let i = 0; i < 300; i++) {
+        drawables.push(new Sprite(program, buffers, textures));
+    }
 
-    // for (let i = 0; i < drawables.length; i++) {
-    //     const drawable = drawables[i];
-    //     const { translation, rotation, scale } = drawable;
-    //     translation.x = Math.random() * size * 2 - size;
-    //     translation.y = Math.random() * size * 2 - size;
-    //     buffer.set(drawable.matrix, i * 9);
-    // }
+    for (let i = 0; i < drawables.length; i++) {
+        const drawable = drawables[i];
+        const { translation, rotation, scale } = drawable;
+        translation.x = Math.random() * size * 2 - size;
+        translation.y = Math.random() * size * 2 - size;
+        dynamicBuffer.data.set(drawable.matrix, i * 9);
+    }
 
     dynamicBuffer.changed = true;
     dynamicBuffer.length = drawables.length * 9;
@@ -146,7 +139,7 @@ const animation = quantum.animate(({ delta }) => {
     display.innerHTML = `FPS: ${fps} Count: ${drawables.length}`;
 
     if (fps > 0 && fps < 30) {
-        //animation.stop();
+        animation.stop();
     }
 });
 
