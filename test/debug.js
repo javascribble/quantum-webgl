@@ -12,7 +12,7 @@ const { Camera, Sprite, context } = webgl;
 
 const size = 10;
 const camera = new Camera();
-camera.projection.size = size;
+camera.size = size;
 
 context.allocate({
     shaders: [
@@ -90,6 +90,7 @@ context.allocate({
         },
         {
             name: 'model',
+            data: new Float32Array(1000000), // TODO: Resize.
             attributes: [
                 {
                     name: 'modelTransform',
@@ -109,38 +110,43 @@ context.allocate({
     ]
 });
 
-const dynamicBuffer = context.buffers.get('model');
-const buffer = new Float32Array(300000); // TODO: Resize.
-
 const program = context.programs.get('default');
 const buffers = [context.buffers.get('quad'), context.buffers.get('model')];
 const textures = [context.textures.get('default')];
 
+const dynamicBuffer = context.buffers.get('model');
+
 const drawables = [];
+for (let i = 0; i < 50000; i++) {
+    const drawable = new Sprite(program, buffers, textures);
+    drawables.push(drawable);
+    dynamicBuffer.data.set(drawable.matrix, i * 9);
+}
+
 const animation = quantum.animate(({ delta }) => {
     const fps = Math.trunc(1000 / delta);
 
-    for (let i = 0; i < 300; i++) {
-        drawables.push(new Sprite(program, buffers, textures));
-    }
+    // for (let i = 0; i < 100; i++) {
+    //     drawables.push(new Sprite(program, buffers, textures));
+    // }
 
-    for (let i = 0; i < drawables.length; i++) {
-        const drawable = drawables[i];
-        const { translation, rotation, scale } = drawable;
-        translation.x = Math.random() * size * 2 - size;
-        translation.y = Math.random() * size * 2 - size;
-        buffer.set(drawable.matrix, i * 9);
-    }
+    // for (let i = 0; i < drawables.length; i++) {
+    //     const drawable = drawables[i];
+    //     const { translation, rotation, scale } = drawable;
+    //     translation.x = Math.random() * size * 2 - size;
+    //     translation.y = Math.random() * size * 2 - size;
+    //     buffer.set(drawable.matrix, i * 9);
+    // }
 
     dynamicBuffer.changed = true;
-    dynamicBuffer.data = buffer.subarray(0, drawables.length * 9);
+    dynamicBuffer.length = drawables.length * 9;
 
     draw(context, drawables);
 
     display.innerHTML = `FPS: ${fps} Count: ${drawables.length}`;
 
     if (fps > 0 && fps < 30) {
-        animation.stop();
+        //animation.stop();
     }
 });
 
