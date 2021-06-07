@@ -1,5 +1,5 @@
-import { Matrix3 } from '../../matrix3.js';
-import { Angle } from '../../angle.js';
+import { Matrix3 } from '../matrix3.js';
+import { Angle } from '../angle.js';
 
 export class Rotation extends Angle {
     #matrix = new Matrix3();

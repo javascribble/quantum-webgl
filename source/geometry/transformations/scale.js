@@ -1,9 +1,13 @@
-import { Matrix3 } from '../../matrix3.js';
-import { Vector2 } from '../../vector2.js';
+import { Matrix3 } from '../matrix3.js';
+import { Vector2 } from '../vector2.js';
 
-export class Translation extends Vector2 {
+export class Scale extends Vector2 {
     #matrix = new Matrix3();
     #changed = false;
+
+    constructor() {
+        super([1, 1]);
+    }
 
     get changed() { return this.#changed; }
 
@@ -24,8 +28,8 @@ export class Translation extends Vector2 {
             this.#changed = false;
 
             const matrix = this.#matrix;
-            matrix[6] = this.x;
-            matrix[7] = this.y;
+            matrix[0] = this.x;
+            matrix[4] = this.y;
         }
 
         return this.#matrix;

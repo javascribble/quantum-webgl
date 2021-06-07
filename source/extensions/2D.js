@@ -1,6 +1,6 @@
 import { WebGL } from '../elements/webgl.js';
-import { Camera } from '../graphics/2D/camera.js';
-import { Node } from '../graphics/2D/node.js';
-import { Sprite } from '../graphics/2D/sprite.js';
+import { Camera } from '../graphics/camera.js';
+import { Node } from '../graphics/node.js';
+import { Sprite } from '../graphics/sprite.js';
 
 Object.assign(WebGL.prototype, { Camera, Node, Sprite });

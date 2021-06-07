@@ -4,13 +4,13 @@ export class Angle extends Float32Array {
     constructor(array = [0], offset = 0, length = 1) {
         super(array, offset, length);
 
-        this.#degrees = array[0] * Angle.degreeRatio;
+        this.#degrees = Angle.convertRadians(array[0]);
     }
 
     get radians() { return this[0]; }
     set radians(value) {
         const radians = value % (2 * Math.PI);
-        this.#degrees = radians * Angle.degreeRatio;
+        this.#degrees = Angle.convertRadians(radians);
         this[0] = radians;
     }
 
@@ -18,10 +18,10 @@ export class Angle extends Float32Array {
     set degrees(value) {
         const degrees = value % 360;
         this.#degrees = degrees;
-        this[0] = degrees * Angle.radianRatio;
+        this[0] = Angle.convertDegrees(degrees);
     }
 
-    static degreeRatio = 180 / Math.PI;
+    static convertDegrees = degrees => degrees * 180 / Math.PI;
 
-    static radianRatio = Math.PI / 180;
+    static convertRadians = radians => radians * Math.PI / 180;
 }

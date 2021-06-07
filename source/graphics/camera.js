@@ -1,6 +1,14 @@
-import { Matrix3 } from '../../matrix3.js';
+import { Node } from './node.js';
 
-export class Projection {
+export class Camera extends Node {
+    constructor() {
+        const projection = new Projection();
+
+        super(projection);
+
+        this.projection = projection;
+    }
+
     #matrix = new Matrix3();
     #changed = false;
     #aspect = 1;
