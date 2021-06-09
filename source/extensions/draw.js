@@ -3,6 +3,7 @@ import { useProgram } from '../handles/programs.js';
 import { bindBuffer, bufferData } from '../handles/buffers.js';
 import { bindTexture, bufferTexture } from '../handles/textures.js';
 
+// TODO: Revisit after functional requirements.
 WebGL.prototype.draw = function (drawables) {
     const context = this.context;
     for (const { program, buffers, textures } of drawables) {

@@ -1,7 +1,6 @@
 ﻿import { addVariables } from '../shaders/variables.js';
 
 export const createProgram = (configuration, context) => {
-    // TODO: Decouple from shader handle cache.
     const program = {
         vertexShader: context.shaders.get(configuration.vertexShader),
         fragmentShader: context.shaders.get(configuration.fragmentShader),
