@@ -7,21 +7,21 @@ export class HandleMap extends Map {
         this.reallocate = reallocate;
     }
 
-    set(key, options) {
-        if (this.has(key)) {
-            this.get(key).references++;
+    load(name, options) {
+        if (this.has(name)) {
+            this.get(name).references++;
         } else {
             const value = this.allocate(options);
             value.references = 1;
-            super.set(key, value);
+            this.set(name, value);
         }
     }
 
-    delete(key) {
-        const value = this.get(key);
+    unload(name) {
+        const value = this.get(name);
         if (value.references-- === 0) {
             this.deallocate(value);
-            super.delete(key);
+            this.delete(name);
         }
     }
 

@@ -2,7 +2,8 @@ import '/node_modules/@javascribble/quantum/source/main.js';
 import '/node_modules/@javascribble/quantum-canvas/source/main.js';
 import '/node_modules/@javascribble/quantum-canvas/source/decorators/loaders.js';
 import '/source/decorators/loaders.js';
-import '/source/extensions/draw.js';
+import '/source/extensions/renderer.js';
+import '/source/extensions/resources.js';
 import '/source/main.js';
 
 const display = document.querySelector('#display');
@@ -11,22 +12,6 @@ const webgl = document.querySelector('quantum-webgl');
 const { load } = quantum;
 const { context } = webgl;
 
-const allocate = data => {
-    for (const [type, configurations] of Object.entries(data)) {
-        for (const configuration of configurations) {
-            context[type].set(configuration.name, configuration);
-        }
-    }
-};
-
-const deallocate = data => {
-    for (const [type, configurations] of Object.entries(data)) {
-        for (const configuration of configurations) {
-            context[type].delete(configuration.name);
-        }
-    }
-};
-
 const path = '/test/resources/';
 const resources = ['vertex.glsl', 'fragment.glsl', 'scene.json', 'image.png'];
 Promise.all(resources.map(resource => load(path + resource))).then(([vertexShader, fragmentShader, scene, image]) => {
@@ -34,7 +19,7 @@ Promise.all(resources.map(resource => load(path + resource))).then(([vertexShade
     scene.shaders[1].source = fragmentShader;
     scene.textures[0].data = image;
 
-    allocate(scene);
+    webgl.load(scene);
 
     const program = context.programs.get('default');
     const buffers = [context.buffers.get('quad'), context.buffers.get('model')];
@@ -49,7 +34,7 @@ Promise.all(resources.map(resource => load(path + resource))).then(([vertexShade
 
         if (fps > 0 && fps < 30) {
             animation.stop();
-            deallocate(scene);
+            webgl.unload(scene);
         }
     });
 
