@@ -11,6 +11,22 @@ const webgl = document.querySelector('quantum-webgl');
 const { load } = quantum;
 const { context } = webgl;
 
+const allocate = data => {
+    for (const [type, configurations] of Object.entries(data)) {
+        for (const configuration of configurations) {
+            context[type].set(configuration.name, configuration);
+        }
+    }
+};
+
+const deallocate = data => {
+    for (const [type, configurations] of Object.entries(data)) {
+        for (const configuration of configurations) {
+            context[type].delete(configuration.name);
+        }
+    }
+};
+
 const path = '/test/resources/';
 const resources = ['vertex.glsl', 'fragment.glsl', 'scene.json', 'image.png'];
 Promise.all(resources.map(resource => load(path + resource))).then(([vertexShader, fragmentShader, scene, image]) => {
@@ -18,7 +34,7 @@ Promise.all(resources.map(resource => load(path + resource))).then(([vertexShade
     scene.shaders[1].source = fragmentShader;
     scene.textures[0].data = image;
 
-    context.allocate(scene);
+    allocate(scene);
 
     const program = context.programs.get('default');
     const buffers = [context.buffers.get('quad'), context.buffers.get('model')];
@@ -33,7 +49,7 @@ Promise.all(resources.map(resource => load(path + resource))).then(([vertexShade
 
         if (fps > 0 && fps < 30) {
             animation.stop();
-            context.deallocate(scene);
+            deallocate(scene);
         }
     });
 
