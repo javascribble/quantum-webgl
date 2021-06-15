@@ -15,8 +15,8 @@ export class WebGL extends Quantum.Canvas {
         super.disconnectedCallback();
     }
 
-    getContext(options = canvasOptions) {
-        const context = super.getContext('webgl2', options) || super.getContext('webgl', options);
+    getContext() {
+        const context = super.getContext('webgl2', canvasOptions) || super.getContext('webgl', canvasOptions);
         applyConfigurations(context);
         applyExtensions(context);
         applyHandles(context);
