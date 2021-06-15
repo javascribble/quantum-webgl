@@ -3,7 +3,7 @@
         data: configuration.data ? new Float32Array(configuration.data) : null,
         target: context[configuration.target] || configuration.target || context.ARRAY_BUFFER,
         usage: context[configuration.usage] || configuration.usage || context.DYNAMIC_DRAW,
-        attributes: [...configuration.attributes], // TODO: Deep clone?
+        attributes: [...configuration.attributes],
         offset: configuration.offset || 0,
         changed: !!configuration.data
     };

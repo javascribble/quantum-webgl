@@ -1,8 +1,5 @@
 import { WebGL } from '../elements/webgl.js';
 
-const { load } = quantum;
-
-// TODO: Revisit after functional requirements.
 WebGL.prototype.load = function (scene) {
     for (const [type, options] of Object.entries(scene)) {
         const handles = this.context[type];
