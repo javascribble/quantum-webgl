@@ -21,7 +21,7 @@ export const restoreTexture = (texture, context) => texture.handle = context.cre
 export const bindTexture = (texture, context) => {
     context.activeTexture(context.TEXTURE0 + texture.unit);
     context.bindTexture(texture.target, texture.handle);
-}
+};
 
 export const bufferTexture = (texture, context) => {
     for (const [name, value] of Object.entries(texture.parameters)) {
