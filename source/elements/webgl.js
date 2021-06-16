@@ -29,7 +29,7 @@ export class WebGL extends Quantum.Canvas {
         restoreHandles(this);
     }
 
-    resize() {
+    resize(event) {
         super.resize();
 
         this.context.viewport(0, 0, this.context.drawingBufferWidth, this.context.drawingBufferHeight);
