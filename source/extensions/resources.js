@@ -1,4 +1,4 @@
-import { WebGL } from '../elements/webgl.js';
+const { WebGL } = Quantum;
 
 WebGL.prototype.load = function (scene) {
     for (const [type, options] of Object.entries(scene)) {

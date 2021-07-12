@@ -1,7 +1,8 @@
-import { WebGL } from '../elements/webgl.js';
 import { useProgram } from '../handles/programs.js';
 import { bindBuffer, bufferData } from '../handles/buffers.js';
 import { bindTexture, bufferTexture } from '../handles/textures.js';
+
+const { WebGL } = Quantum;
 
 WebGL.prototype.draw = function (drawables) {
     const context = this.context;
