@@ -17,7 +17,7 @@ const resources = ['vertex.glsl', 'fragment.glsl', 'scene.json', 'image.png'];
 const [vertexShader, fragmentShader, scene, image] = await Promise.all(resources.map(resource => load(path + resource)));
 scene.shaders[0].source = vertexShader;
 scene.shaders[1].source = fragmentShader;
-scene.textures[0].data = image;
+scene.textures[0].source = image;
 
 webgl.load(scene);
 

@@ -8,8 +8,8 @@ export const createTexture = (configuration, context) => {
         type: context[configuration.type] || configuration.type || context.UNSIGNED_BYTE,
         format: context[configuration.format] || configuration.format || context.RGBA,
         unit: configuration.unit || 0,
-        changed: !!configuration.data,
-        data: configuration.data
+        changed: !!configuration.source,
+        source: configuration.source
     };
 
     restoreTexture(texture, context);
@@ -29,7 +29,7 @@ export const bufferTexture = (texture, context) => {
         context.texParameterf(texture.target, name, value);
     }
 
-    context.texImage2D(texture.target, /* mipmap */ 0, texture.format, texture.format, texture.type, texture.data);
+    context.texImage2D(texture.target, /* mipmap */ 0, texture.format, texture.format, texture.type, texture.source);
 };
 
 export const deleteTexture = (texture, context) => context.deleteTexture(texture.handle);
