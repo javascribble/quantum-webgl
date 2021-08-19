@@ -2,7 +2,9 @@ import { useProgram } from '../handles/programs.js';
 import { bindBuffer, bufferData } from '../handles/buffers.js';
 import { bindTexture, bufferTexture } from '../handles/textures.js';
 
-export const draw = function (drawables) {
+const { WebGL } = Quantum;
+
+WebGL.prototype.draw = function (drawables) {
     const context = this.context;
     for (const { program, buffers, textures } of drawables) {
         if (context.program !== program) {

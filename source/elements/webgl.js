@@ -3,15 +3,8 @@ import { applyHandles, restoreHandles } from '../context/handles.js';
 import { applyConfigurations } from '../context/configuration.js';
 import { applyExtensions } from '../context/extensions.js';
 import { canvasOptions } from '../constants/canvas.js';
-import { draw } from '../renderer/draw.js';
 
 export class WebGL extends Quantum.Canvas {
-    constructor() {
-        super();
-
-        this.draw = draw.bind(this);
-    }
-
     connectedCallback() {
         addEventListeners(this);
         super.connectedCallback();
