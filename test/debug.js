@@ -12,14 +12,8 @@ const webgl = document.querySelector('quantum-webgl');
 const { load } = quantum;
 const { context } = webgl;
 
-const path = '/test/resources/';
-const resources = ['vertex.glsl', 'fragment.glsl', 'scene.json', 'image.png'];
-const [vertexShader, fragmentShader, scene, image] = await Promise.all(resources.map(resource => load(path + resource)));
-scene.shaders[0].source = vertexShader;
-scene.shaders[1].source = fragmentShader;
-scene.textures[0].source = image;
-
-webgl.load(scene);
+const scene = await load('debug.json');
+await webgl.load(scene);
 
 const program = context.programs.get('default');
 const buffers = [context.buffers.get('quad'), context.buffers.get('model')];

@@ -1,11 +1,11 @@
 ﻿export const createBuffer = (configuration, context) => {
     const buffer = {
-        data: configuration.data ? new Float32Array(configuration.data) : null,
+        source: configuration.source ? new Float32Array(configuration.source) : null,
         target: context[configuration.target] || configuration.target || context.ARRAY_BUFFER,
         usage: context[configuration.usage] || configuration.usage || context.DYNAMIC_DRAW,
         attributes: [...configuration.attributes],
         offset: configuration.offset || 0,
-        changed: !!configuration.data
+        changed: !!configuration.source
     };
 
     restoreBuffer(buffer, context);
@@ -18,9 +18,9 @@ export const bindBuffer = (buffer, context) => context.bindBuffer(buffer.target,
 
 export const bufferData = (buffer, context) => {
     if (buffer.offset) {
-        context.bufferSubData(buffer.target, buffer.offset, buffer.data);
+        context.bufferSubData(buffer.target, buffer.offset, buffer.source);
     } else {
-        context.bufferData(buffer.target, buffer.data, buffer.usage);
+        context.bufferData(buffer.target, buffer.source, buffer.usage);
     }
 };
 

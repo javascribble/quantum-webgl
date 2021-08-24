@@ -2,11 +2,13 @@
     "shaders": [
         {
             "name": "vertex",
-            "type": "VERTEX_SHADER"
+            "type": "VERTEX_SHADER",
+            "resource": "./resources/vertex.glsl"
         },
         {
             "name": "fragment",
-            "type": "FRAGMENT_SHADER"
+            "type": "FRAGMENT_SHADER",
+            "resource": "./resources/fragment.glsl"
         }
     ],
     "programs": [
@@ -47,24 +49,7 @@
         {
             "name": "quad",
             "usage": "STATIC_DRAW",
-            "data": [
-                -1,
-                1,
-                0.0,
-                1.0,
-                -1,
-                -1,
-                0.0,
-                0.0,
-                1,
-                1,
-                1.0,
-                1.0,
-                1,
-                -1,
-                1.0,
-                0.0
-            ],
+            "resource": "./resources/quad.json",
             "attributes": [
                 {
                     "name": "vertexPosition",
@@ -82,24 +67,7 @@
         },
         {
             "name": "model",
-            "data": [
-                1,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                1,
-                0,
-                0,
-                0,
-                0,
-                1
-            ],
+            "resource": "./resources/model.json",
             "attributes": [
                 {
                     "name": "modelTransform",
@@ -113,7 +81,8 @@
     ],
     "textures": [
         {
-            "name": "default"
+            "name": "default",
+            "resource": "./resources/image.png"
         }
     ]
 }
