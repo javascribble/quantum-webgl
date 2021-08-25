@@ -18,12 +18,14 @@ const program = context.programs.get('default');
 const buffers = [context.buffers.get('quad'), context.buffers.get('model')];
 const textures = [context.textures.get('default')];
 const drawables = [{ program, buffers, textures }];
+const state = { drawables };
+
 const animation = quantum.animate(({ delta }) => {
     const fps = Math.trunc(1000 / delta);
 
     display.innerHTML = `FPS: ${fps} Count: ${drawables.length}`;
 
-    webgl.draw(drawables);
+    webgl.draw(state);
 
     if (fps > 0 && fps < 30) {
         animation.stop();

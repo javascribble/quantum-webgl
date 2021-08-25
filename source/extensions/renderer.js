@@ -4,8 +4,9 @@ import { bindTexture, bufferTexture } from '../handles/textures.js';
 
 const { WebGL } = Quantum;
 
-WebGL.prototype.draw = function (drawables) {
+WebGL.prototype.draw = function (state) {
     const context = this.context;
+    const { drawables } = state;
     for (const { program, buffers, textures } of drawables) {
         if (context.program !== program) {
             useProgram(program, context);
