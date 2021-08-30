@@ -4,7 +4,7 @@ import { bindTexture, bufferTexture } from '../handles/textures.js';
 
 const { WebGL } = Quantum;
 
-WebGL.prototype.draw = function (state) {
+WebGL.prototype.render = function (state) {
     const context = this.context;
     const { drawables } = state;
     for (const { program, buffers, textures } of drawables) {

@@ -25,7 +25,7 @@ const animation = quantum.animate(({ delta }) => {
 
     display.innerHTML = `FPS: ${fps} Count: ${drawables.length}`;
 
-    webgl.draw(state);
+    webgl.render(state);
 
     if (fps > 0 && fps < 30) {
         animation.stop();
