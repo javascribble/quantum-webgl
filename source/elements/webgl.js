@@ -1,18 +1,19 @@
 import { addEventListeners, removeEventListeners } from '../context/browser.js';
-import { applyHandles, restoreHandles } from '../context/handles.js';
 import { applyConfigurations } from '../context/configuration.js';
 import { applyExtensions } from '../context/extensions.js';
+import { applyHandles } from '../context/handles.js';
 import { canvasOptions } from '../constants/canvas.js';
+import { draw } from '../renderer/draw.js';
 import '../plugins/loaders.js';
 
 export class WebGL extends Quantum.Canvas {
     connectedCallback() {
-        addEventListeners(this);
+        addEventListeners();
         super.connectedCallback();
     }
 
     disconnectedCallback() {
-        removeEventListeners(this);
+        removeEventListeners();
         super.disconnectedCallback();
     }
 
@@ -24,15 +25,12 @@ export class WebGL extends Quantum.Canvas {
         return context;
     }
 
-    restore() {
-        applyConfigurations(this);
-        applyExtensions(this);
-        restoreHandles(this);
+    render(state) {
+        draw(this.context, state);
     }
 
-    resize() {
-        super.resize();
-
+    resize(size) {
+        super.resize(size);
         this.context.viewport(0, 0, this.context.drawingBufferWidth, this.context.drawingBufferHeight);
     }
 }

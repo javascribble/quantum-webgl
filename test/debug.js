@@ -1,9 +1,7 @@
 import '/node_modules/@javascribble/quantum/bundles/main-window.js';
 import '/node_modules/@javascribble/quantum-canvas/bundles/main.js';
-import '/node_modules/@javascribble/quantum-canvas/bundles/main-plugins.js';
 import '/bundles/main.js';
 import '/bundles/main-extensions.js';
-import '/bundles/main-plugins.js';
 
 const display = document.querySelector('#display');
 const webgl = document.querySelector('quantum-webgl');
