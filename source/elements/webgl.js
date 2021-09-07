@@ -3,6 +3,7 @@ import { applyHandles, restoreHandles } from '../context/handles.js';
 import { applyConfigurations } from '../context/configuration.js';
 import { applyExtensions } from '../context/extensions.js';
 import { canvasOptions } from '../constants/canvas.js';
+import '../plugins/loaders.js';
 
 export class WebGL extends Quantum.Canvas {
     connectedCallback() {
