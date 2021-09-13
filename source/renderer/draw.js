@@ -2,7 +2,7 @@ import { useProgram } from '../handles/programs.js';
 import { bindBuffer, bufferData } from '../handles/buffers.js';
 import { bindTexture, bufferTexture } from '../handles/textures.js';
 
-export const draw = (context, state) => {
+export const draw = (state, context) => {
     const { drawables } = state;
     for (const { program, buffers, textures } of drawables) {
         if (context.program !== program) {

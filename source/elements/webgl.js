@@ -3,7 +3,6 @@ import { applyConfigurations } from '../context/configuration.js';
 import { applyExtensions } from '../context/extensions.js';
 import { applyHandles } from '../context/handles.js';
 import { canvasOptions } from '../constants/canvas.js';
-import { draw } from '../renderer/draw.js';
 import '../plugins/loaders.js';
 
 export class WebGL extends Quantum.Canvas {
@@ -23,10 +22,6 @@ export class WebGL extends Quantum.Canvas {
         applyExtensions(context);
         applyHandles(context);
         return context;
-    }
-
-    render(state) {
-        draw(this.context, state);
     }
 
     resize(size) {
