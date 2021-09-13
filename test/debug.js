@@ -1,5 +1,4 @@
 import '/node_modules/@javascribble/quantum/bundles/main-window.js';
-import '/node_modules/@javascribble/quantum-canvas/bundles/main.js';
 import '/bundles/main.js';
 
 const display = document.querySelector('#display');
