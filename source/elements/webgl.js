@@ -1,7 +1,7 @@
 import { initialize } from '../context/canvas.js';
+import { load, unload } from '../context/resources.js';
 import { resize } from '../context/viewport.js';
 import { render } from '../renderer/render.js';
-import { load, unload } from '../resources/loading.js';
 import webgl from '../templates/webgl.js';
 import '../context/browser.js';
 import '../plugins/loaders.js';
