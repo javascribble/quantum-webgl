@@ -10,14 +10,6 @@ const restore = event => {
     restoreHandles(context);
 };
 
-export const addEventListeners = () => {
-    addEventListener(events.contextCreationError, console.log);
-    addEventListener(events.contextLost, console.log);
-    addEventListener(events.contextRestored, restore);
-};
-
-export const removeEventListeners = () => {
-    removeEventListener(events.contextCreationError, console.log);
-    removeEventListener(events.contextLost, console.log);
-    removeEventListener(events.contextRestored, restore);
-};
+addEventListener(events.contextCreationError, console.log);
+addEventListener(events.contextLost, console.log);
+addEventListener(events.contextRestored, restore);

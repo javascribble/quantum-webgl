@@ -7,6 +7,6 @@ export const extensionOptions = [
 ];
 
 export const textureOptions = {
-    'TEXTURE_MIN_FILTER': 'LINEAR',
+    'TEXTURE_MIN_FILTER': 'NEAREST',
     'TEXTURE_MAG_FILTER': 'NEAREST'
 };

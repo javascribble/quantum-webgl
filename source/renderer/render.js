@@ -2,7 +2,8 @@ import { useProgram } from '../handles/programs.js';
 import { bindBuffer, bufferData } from '../handles/buffers.js';
 import { bindTexture, bufferTexture } from '../handles/textures.js';
 
-export const draw = (state, context) => {
+export function render(state) {
+    const { context } = this;
     const { drawables } = state;
     for (const { program, buffers, textures } of drawables) {
         if (context.program !== program) {
@@ -50,4 +51,4 @@ export const draw = (state, context) => {
     //context.drawElements(mode, count, type, offset);
     context.drawArraysInstanced(context.TRIANGLE_STRIP, 0, 4, drawables.length);
     //context.drawElementsInstanced(mode, count, type, offset, instances);
-};
+}

@@ -5,7 +5,6 @@ export const applyConfigurations = context => {
         context.enable(context[configurationOption]);
     }
 
-    // TODO: Make these flexible.
     context.pixelStorei(context.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
     context.pixelStorei(context.UNPACK_FLIP_Y_WEBGL, true);
 

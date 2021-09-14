@@ -1,17 +1,17 @@
-import { addEventListeners, removeEventListeners } from '../context/browser.js';
-import { applyConfigurations } from '../context/configuration.js';
-import { applyExtensions } from '../context/extensions.js';
-import { applyHandles } from '../context/handles.js';
-import { canvasOptions } from '../constants/canvas.js';
-import { draw } from '../renderer/draw.js';
+import { initialize } from '../context/canvas.js';
+import { resize } from '../context/viewport.js';
+import { render } from '../renderer/render.js';
+import { load, unload } from '../resources/loading.js';
 import webgl from '../templates/webgl.js';
+import '../context/browser.js';
 import '../plugins/loaders.js';
 
-const { resizeObserver, load } = quantum;
+const { resizeObserver } = quantum;
 
 export class WebGL extends Quantum {
     #canvas = this.shadowRoot.querySelector('canvas');
-    context = this.getContext();
+    context = initialize(this.#canvas);
+    scale = devicePixelRatio;
 
     constructor() {
         super();
@@ -19,54 +19,10 @@ export class WebGL extends Quantum {
         this.observers.add(resizeObserver);
     }
 
-    connectedCallback() {
-        addEventListeners();
-        super.connectedCallback();
-    }
-
-    disconnectedCallback() {
-        removeEventListeners();
-        super.disconnectedCallback();
-    }
-
-    getContext() {
-        const context = this.#canvas.getContext('webgl2', canvasOptions) || this.#canvas.getContext('webgl', canvasOptions);
-        applyConfigurations(context);
-        applyExtensions(context);
-        applyHandles(context);
-        return context;
-    }
-
-    resize() {
-        this.context.viewport(0, 0, this.context.drawingBufferWidth, this.context.drawingBufferHeight);
-    }
-
-    render(state) {
-        draw(state, this.context);
-    }
-
-    async load(data) {
-        for (const [type, options] of Object.entries(data)) {
-            const handles = this.context[type];
-            for (const option of options) {
-                if (option.resource) {
-                    option.source = await load(option.resource);
-                }
-
-                handles.load(option.name, option);
-            }
-        }
-    }
-
-    unload(data) {
-        for (const [type, options] of Object.entries(data)) {
-            const handles = this.context[type];
-            for (const option of options) {
-                handles.unload(option.name, option);
-                delete option.source;
-            }
-        }
-    }
+    load = load;
+    unload = unload;
+    resize = resize;
+    render = render;
 }
 
 WebGL.define('quantum-webgl', webgl);
