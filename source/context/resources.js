@@ -1,4 +1,6 @@
-const { load: loadResource } = quantum;
+const { load: loadResource, loaders, loadText } = quantum;
+
+loaders.glsl = loadText;
 
 export async function load(data) {
     for (const [type, options] of Object.entries(data)) {

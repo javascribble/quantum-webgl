@@ -4,7 +4,6 @@ import { resize } from '../context/viewport.js';
 import { render } from '../renderer/render.js';
 import webgl from '../templates/webgl.js';
 import '../context/browser.js';
-import '../plugins/loaders.js';
 
 const { resizeObserver } = quantum;
 
