@@ -1,5 +1,5 @@
 ﻿import { textureOptions } from '../constants/context.js';
-import { mapEntries } from '../utilities/objects.js';
+import { mapEntries } from '../utilities/object.js';
 
 export const createTexture = (configuration, context) => {
     const texture = {
